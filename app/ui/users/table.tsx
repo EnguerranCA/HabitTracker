@@ -8,7 +8,7 @@ export default async function UsersTable({
   query: string;
   currentPage: number;
 }) {
-  const users = await fetchFilteredUsers(query);
+  const users = await fetchFilteredUsers(query, currentPage);
 
   return (
     <div className="mt-6 flow-root">

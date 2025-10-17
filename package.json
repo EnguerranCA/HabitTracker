@@ -38,5 +38,11 @@
       "bcrypt",
       "sharp"
     ]
-  }
+  },
+  "name": "habit-tracker-next",
+  "version": "1.0.0",
+  "description": "Un traqueur d'haibitudes dans l'univers du hérisson.",
+  "main": "postcss.config.js",
+  "author": "",
+  "license": "ISC"
 }
