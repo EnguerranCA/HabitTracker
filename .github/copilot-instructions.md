@@ -73,14 +73,14 @@
 
 ## 🟡 **Phase 2 — Gamification & immersion**
 
-### US8. En tant qu'utilisateur, je veux gagner des glands en accomplissant mes habitudes pour faire progresser mon niveau.
+### US8. En tant qu'utilisateur, je veux gagner de l'XP en accomplissant mes habitudes pour faire progresser mon niveau.
 **Critères d'acceptation :**
-- [ ] Chaque habitude accomplie rapporte des glands (🌰) 
-- [ ] Barre de progression des glands visible sur le profil utilisateur
+- [ ] Chaque habitude accomplie rapporte des points d'XP 
+- [ ] Barre de progression XP visible sur le profil utilisateur
 - [ ] Passage au niveau suivant avec notification visuelle
-- [ ] Formule de progression exponentielle (par exemple niveau n = n² × 100 glands)
-- [ ] Bonus de glands pour les streaks (ajouter 0.1 au multiplicateur chaque jour jusqu'à x2)
-- [ ] Historique des gains de glands consultable dans les stats avec une courbe
+- [ ] Formule de progression exponentielle (niveau n = n² × 100 XP)
+- [ ] Bonus XP pour les streaks (×1.5 à partir de 7 jours)
+- [ ] Historique des gains d'XP consultable
 
 ### US9. En tant qu'utilisateur, je veux voir mon hérisson grandir à chaque niveau pour visualiser ma progression.
 **Critères d'acceptation :**
@@ -90,41 +90,39 @@
 - [ ] Sauvegarde de l'état actuel du hérisson
 - [ ] Possibility de voir l'évolution passée dans une galerie
 
-### US10. En tant qu'utilisateur, je veux dépenser mes glands pour nourrir mon hérisson et le faire grandir.
+### US10. En tant qu'utilisateur, je veux nourrir mon hérisson quand je réussis mes tâches pour renforcer la sensation de récompense.
 **Critères d'acceptation :**
-- [ ] Bouton "Nourrir" disponible quand l'utilisateur a des glands (🌰)
-- [ ] Animation de glands qui tombent directement vers le hérisson
-- [ ] Jauge de bonheur/satiété du hérisson qui augmente avec les glands donnés
-- [ ] Coût fixe : 1 gland = 1 point de nourriture
-- [ ] Le hérisson réagit visuellement quand il mange des glands (mastication, satisfaction)
-- [ ] Système de "faim" : le hérisson a besoin d'être nourri régulièrement pour grandir
-- [ ] Plus le hérisson est nourri, plus il grandit vite vers le niveau suivant
+- [ ] Bouton "Nourrir" apparaît après chaque habitude accomplie
+- [ ] Animation de nourriture tombant vers le hérisson
+- [ ] Jauge de bonheur/satiété du hérisson
+- [ ] Différents types de nourriture selon le type d'habitude
+- [ ] Le hérisson réagit visuellement (expressions, mouvements)
+- [ ] Système de "faim" qui décroît avec le temps
 
-### US11. En tant qu'utilisateur, je veux débloquer automatiquement des éléments de décor à certains niveaux pour personnaliser l'environnement.
+### US11. En tant qu'utilisateur, je veux débloquer des éléments de décor à certains niveaux pour personnaliser l'environnement.
 **Critères d'acceptation :**
-- [ ] Catalogue d'éléments débloqués automatiquement par niveau
-- [ ] Notification de déblocage à chaque passage de niveau
-- [ ] Interface de placement pour positionner les éléments débloqués
+- [ ] Catalogue d'éléments débloqués par niveau (arbres, fleurs, rochers)
+- [ ] Interface de placement pour positionner les éléments
 - [ ] Sauvegarde de la configuration du décor
 - [ ] Preview avant placement définitif
 - [ ] Limite d'éléments par type pour éviter le chaos visuel
 - [ ] Possibilité de supprimer/déplacer les éléments placés
 
-### US12. En tant qu'utilisateur, je veux associer une tâche à un élément du décor débloqué pour lier mes habitudes à la croissance du monde virtuel.
+### US12. En tant qu'utilisateur, je veux associer une tâche à un élément du décor pour lier mes habitudes à la croissance du monde virtuel.
 **Critères d'acceptation :**
-- [ ] Lors de la création d'habitude, sélection d'un élément de décor déjà débloqué
+- [ ] Lors de la création d'habitude, sélection d'un élément de décor associé
 - [ ] L'élément grandit/fleurit quand l'habitude est accomplie
 - [ ] États visuels dégradés si l'habitude est négligée
 - [ ] Lien visible entre habitude et élément (tooltip/highlight)
 - [ ] Possibilité de changer l'association après création
 - [ ] Animation spéciale lors de l'accomplissement de l'habitude liée
 
-### US13. En tant qu'utilisateur, je veux un graphique pour visualiser ma productivité et mes gains de glands sur une période.
+### US13. En tant qu'utilisateur, je veux un graphique pour visualiser ma productivité sur une période.
 **Critères d'acceptation :**
 - [ ] Graphique en barres par semaine/mois montrant le % de réussite
-- [ ] Courbe d'évolution des glands gagnés dans le temps
+- [ ] Courbe d'évolution de l'XP dans le temps
 - [ ] Filtrage par habitude spécifique ou vue globale
-- [ ] Légende claire et tooltips informatifs (habitudes accomplies + glands gagnés)
+- [ ] Légende claire et tooltips informatifs
 - [ ] Export des données en CSV
 - [ ] Comparaison entre périodes (mois actuel vs précédent)
 
@@ -141,13 +139,13 @@
 
 ## 🟠 **Phase 3 — Compétition & multijoueur**
 
-### US15. En tant qu'utilisateur, je veux me comparer à d'autres joueurs dans un classement basé sur les glands pour me motiver.
+### US15. En tant qu'utilisateur, je veux me comparer à d'autres joueurs dans un classement pour me motiver.
 **Critères d'acceptation :**
-- [ ] Classement mondial basé sur le total de glands gagnés ou le niveau
+- [ ] Classement mondial basé sur l'XP total ou le niveau
 - [ ] Position de l'utilisateur affiché dans le classement
-- [ ] Top 10 visible avec pseudonymes, niveaux et glands totaux
+- [ ] Top 10 visible avec pseudonymes et niveaux
 - [ ] Filtre par période (semaine, mois, all-time)
-- [ ] Anonymisation des données sensibles (seuls pseudos et statistiques de glands)
+- [ ] Anonymisation des données sensibles (seuls pseudos et XP)
 - [ ] Mise à jour temps réel du classement
 - [ ] Badge spécial pour le top 3
 
@@ -155,36 +153,79 @@
 **Critères d'acceptation :**
 - [ ] Galerie des hérissons du top 10 avec leur environnement
 - [ ] Informations publiques : niveau, nombre d'habitudes, streaks record
+- [ ] Possibilité de "suivre" un joueur inspirant
 - [ ] Tags des habitudes populaires chez les top players
 - [ ] Profils publics consultables (si opt-in du joueur)
 - [ ] Système de "likes" sur les environnements créatifs
 
-### US17. En tant qu'utilisateur, je veux lancer une phase de focus (style Pomodoro) pour gagner des glands bonus en me concentrant.
+### US17. En tant qu'utilisateur, je veux lancer une phase de focus (style Pomodoro) pour gagner des points en me concentrant.
 **Critères d'acceptation :**
 - [ ] Timer configurable (15, 25, 45 minutes)
 - [ ] Interface minimaliste de focus avec chrono
 - [ ] Blocage des notifications pendant la session
 - [ ] Association optionnelle à une habitude spécifique
-- [ ] Gain de glands bonus proportionnel à la durée (25min = 50🌰)
+- [ ] Gain d'XP bonus proportionnel à la durée (25min = 50 XP)
 - [ ] Historique des sessions de focus accomplies
-- [ ] Pause/reprise avec pénalité de glands si interruption
+- [ ] Pause/reprise avec pénalité d'XP si interruption
 
-### US18. En tant qu'utilisateur, je veux gagner des récompenses spéciales en glands lors des phases de focus.
+### US18. En tant qu'utilisateur, je veux gagner des récompenses supplémentaires lors des phases de focus.
 **Critères d'acceptation :**
-- [ ] Multiplicateur de glands temporaire (×2 pendant 1h après focus)
-- [ ] Éléments de décor spéciaux débloqués automatiquement après certains paliers focus (cristaux niveau 10, etc.)
+- [ ] Nourriture spéciale débloquée après sessions de focus
+- [ ] Multiplicateur d'XP temporaire (×2 pendant 1h après focus)
+- [ ] Éléments de décor exclusifs aux sessions de focus (cristaux, etc.)
 - [ ] Badge "Concentration" après 10 sessions réussies
-- [ ] Streaks de focus avec bonus de glands escaladés
-- [ ] Animation spéciale du hérisson pendant les sessions (il dort paisiblement)
-- [ ] Glands bonus augmentés si session focus associée à une habitude
+- [ ] Streaks de focus avec récompenses escaladées
+- [ ] Animation spéciale du hérisson pendant les sessions
 
 ### US19. En tant que nouvel utilisateur, je veux pouvoir arriver sur une landing page pour comprendre le principe de l'application.
 **Critères d'acceptation :**
-- [ ] Hero section expliquant le concept 
+- [ ] Hero section expliquant le concept en une phrase claire
 - [ ] Démonstration visuelle avec captures d'écran de l'app
 - [ ] Section des 3 phases de développement (MVP → Gamification → Compétition)
-- [ ] Témoignages d'utilisateurs fictifs
+- [ ] Témoignages d'utilisateurs fictifs mais crédibles
 - [ ] Call-to-action clair vers l'inscription
 - [ ] Version responsive adaptée mobile/desktop
-- [ ] Temps de chargement rapide
+- [ ] Temps de chargement < 3 secondes
 - [ ] SEO optimisé avec meta tags appropriés
+
+---
+
+---
+
+## Dépendances du projet
+
+### Dépendances principales (package.json)
+
+- **next 15.6.0-canary.6** : Framework React pour le rendu côté serveur et la génération statique
+- **react** / **react-dom** : Bibliothèques de base pour l’UI
+- **tailwindcss** / **@tailwindcss/forms** / **postcss** / **autoprefixer** : Pour le design et le style
+- **next-auth** : Authentification
+- **bcrypt** / **bcryptjs** : Hashage des mots de passe
+- **postgres** : Connexion à la base de données PostgreSQL
+- **zod** : Validation de schéma
+- **clsx** : Gestion conditionnelle des classes CSS
+- **use-debounce** : Gestion des délais en UI
+- **typescript** : Typage statique
+
+### Dépendances de développement
+
+- **eslint** / **eslint-config-next** : Linting
+- **@types/** : Typages pour TypeScript
+
+---
+
+## Base de données
+
+- **PostgreSQL** : Utilisée via la librairie `postgres`.
+- La connexion se fait avec la variable d'environnement `POSTGRES_URL`.
+- Les tables principales utilisées :
+  - **users** : Utilisateurs (id, name, email, password)
+
+Les types TypeScript des données sont définis dans `app/lib/definitions.ts`.
+Les requêtes SQL sont réalisées dans `app/lib/data.ts`.
+Les actions serveur (CRUD utilisateurs, authentification) sont dans `app/lib/actions.ts`.
+
+### Tables à ajouter pour le MVP Habit Tracker
+- **habits** : Table des habitudes (id, user_id, name, emoji, type, iterations, creation_date)
+- **habit_logs** : Historique des réalisations (id, habit_id, date, completed)
+- **user_progress** : Progression utilisateur (id, user_id, level, xp, hedgehog_state)

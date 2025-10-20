@@ -1,6 +1,6 @@
 'use client';
  
-import { lusitana } from '@/app/ui/fonts';
+import { josefinSans } from '@/app/ui/fonts';
 import {
   AtSymbolIcon,
   KeyIcon,
@@ -23,7 +23,7 @@ export default function LoginForm() {
   return (
     <form action={formAction} className="space-y-4">
       <div className="flex-1 rounded-xl bg-background border border-border shadow-md px-6 pb-6 pt-8">
-        <h1 className={`${lusitana.className} mb-6 text-2xl text-foreground text-center`}>
+        <h1 className={`${josefinSans.className} mb-6 text-2xl text-foreground text-center`}>
           Connectez-vous à votre compte
         </h1>
         <div className="w-full space-y-4">

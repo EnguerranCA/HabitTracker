@@ -1,5 +1,4 @@
-Ôªøimport Link from 'next/link';
-import Image from 'next/image';
+import Link from 'next/link';
 import { josefinSans } from '@/app/ui/fonts';
 import { 
   ArrowRightIcon, 
@@ -21,14 +20,14 @@ export default function Page() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">ü¶î</span>
+              <span className="text-2xl">??</span>
               <span className={`text-xl font-bold text-foreground ${josefinSans.className}`}>
                 Habit&apos;Hisson
               </span>
             </div>
             <nav className="hidden md:flex items-center space-x-8">
               <Link href="#fonctionnalites" className="text-foreground-secondary hover:text-foreground transition-colors">
-                Fonctionnalit√©s
+                FonctionnalitÈs
               </Link>
               <Link href="#roadmap" className="text-foreground-secondary hover:text-foreground transition-colors">
                 Roadmap
@@ -58,8 +57,8 @@ export default function Page() {
                   Habit&apos;Hisson
                 </h1>
                 <p className="text-xl text-foreground-secondary mb-8 leading-relaxed">
-                  D√©veloppe tes meilleures habitudes en prenant soin de ton h√©risson virtuel. 
-                  Suis tes progr√®s avec un compagnon qui grandit √† ton rythme ! 
+                  DÈveloppe tes meilleures habitudes en prenant soin de ton hÈrisson virtuel. 
+                  Suis tes progrËs avec un compagnon qui grandit ‡ ton rythme ! 
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link 
@@ -75,9 +74,10 @@ export default function Page() {
                 </div>
               </div>
               <div className="relative">
-                <div className=" from-info-bg to-success-bg rounded-3xl p-8 flex items-center justify-center h-96">
+                <div className="bg-gradient-to-br from-info-bg to-success-bg rounded-3xl p-8 flex items-center justify-center h-96 border border-border-accent">
                   <div className="text-center">
-                    <Image src="/herisson-face.png" alt="H√©risson Habit'Hisson" width={450} height={450 } className="mx-auto" />
+                    <div className="text-8xl mb-4">??</div>
+                    <p className="text-foreground-secondary">Votre compagnon hÈrisson vous attend !</p>
                   </div>
                 </div>
               </div>
@@ -93,14 +93,14 @@ export default function Page() {
                 Suivi intelligent de tes habitudes
               </h2>
               <p className="text-xl text-foreground-secondary max-w-3xl mx-auto">
-                Cr√©e, suis et analyse tes habitudes avec des outils simples et intuitifs
+                CrÈe, suis et analyse tes habitudes avec des outils simples et intuitifs
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <FeatureCard
                 icon={<SparklesIcon className="w-6 h-6" />}
-                title="Habitudes personnalis√©es"
-                description="Cr√©e tes habitudes avec emoji, nom, fr√©quence (quotidienne/hebdomadaire) et type (bonne/mauvaise habitude)."
+                title="Habitudes personnalisÈes"
+                description="CrÈe tes habitudes avec emoji, nom, frÈquence (quotidienne/hebdomadaire) et type (bonne/mauvaise habitude)."
               />
               <FeatureCard
                 icon={<CalendarDaysIcon className="w-6 h-6" />}
@@ -110,22 +110,22 @@ export default function Page() {
               <FeatureCard
                 icon={<ChartBarIcon className="w-6 h-6" />}
                 title="Calendrier visuel"
-                description="Visualise toutes tes habitudes sur un calendrier intuitif avec des pastilles color√©es."
+                description="Visualise toutes tes habitudes sur un calendrier intuitif avec des pastilles colorÈes."
               />
               <FeatureCard
                 icon={<FireIcon className="w-6 h-6" />}
                 title="Streaks motivants"
-                description="Suis tes s√©ries de jours r√©ussis et reste motiv√© avec des statistiques encourageantes."
+                description="Suis tes sÈries de jours rÈussis et reste motivÈ avec des statistiques encourageantes."
               />
               <FeatureCard
                 icon={<ClockIcon className="w-6 h-6" />}
                 title="Rattrapage flexible"
-                description="Rattrape les oublis du jour pr√©c√©dent au d√©marrage d'un nouveau jour."
+                description="Rattrape les oublis du jour prÈcÈdent au dÈmarrage d'un nouveau jour."
               />
               <FeatureCard
                 icon={<ChartBarIcon className="w-6 h-6" />}
-                title="Graphiques de productivit√©"
-                description="Analyse ta progression avec des graphiques d√©taill√©s et des insights personnalis√©s."
+                title="Graphiques de productivitÈ"
+                description="Analyse ta progression avec des graphiques dÈtaillÈs et des insights personnalisÈs."
               />
             </div>
           </div>
@@ -139,39 +139,39 @@ export default function Page() {
                 Un compagnon qui grandit avec toi
               </h2>
               <p className="text-xl text-foreground-secondary max-w-3xl mx-auto">
-                Ton h√©risson √©volue au rythme de tes progr√®s dans un monde virtuel immersif
+                Ton hÈrisson Èvolue au rythme de tes progrËs dans un monde virtuel immersif
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <FeatureCard
                 icon={<SparklesIcon className="w-6 h-6" />}
-                title="Syst√®me d'XP"
-                description="Gagne de l'exp√©rience √† chaque habitude accomplie et fais progresser ton niveau."
+                title="SystËme d'XP"
+                description="Gagne de l'expÈrience ‡ chaque habitude accomplie et fais progresser ton niveau."
               />
               <FeatureCard
-                icon={<span className="text-2xl">ü¶î</span>}
-                title="H√©risson √©volutif"
-                description="Ton h√©risson grandit √† chaque niveau, rendant ta progression visible et amusante."
+                icon={<span className="text-2xl">??</span>}
+                title="HÈrisson Èvolutif"
+                description="Ton hÈrisson grandit ‡ chaque niveau, rendant ta progression visible et amusante."
               />
               <FeatureCard
                 icon={<GiftIcon className="w-6 h-6" />}
-                title="Nourrir ton h√©risson"
-                description="R√©compense ton compagnon virtuel avec de la nourriture √† chaque succ√®s."
+                title="Nourrir ton hÈrisson"
+                description="RÈcompense ton compagnon virtuel avec de la nourriture ‡ chaque succËs."
               />
               <FeatureCard
-                icon={<span className="text-2xl">üè†</span>}
-                title="D√©cors d√©blocables"
-                description="D√©bloque des √©l√©ments de d√©cor √† chaque nouveau niveau pour personnaliser l'environnement."
+                icon={<span className="text-2xl">??</span>}
+                title="DÈcors dÈblocables"
+                description="DÈbloque des ÈlÈments de dÈcor ‡ chaque nouveau niveau pour personnaliser l'environnement."
               />
               <FeatureCard
-                icon={<span className="text-2xl">üå≥</span>}
-                title="Habitudes et d√©cor li√©s"
-                description="Associe tes t√¢ches √† des √©l√©ments du d√©cor pour cr√©er des liens significatifs."
+                icon={<span className="text-2xl">??</span>}
+                title="Habitudes et dÈcor liÈs"
+                description="Associe tes t‚ches ‡ des ÈlÈments du dÈcor pour crÈer des liens significatifs."
               />
               <FeatureCard
                 icon={<ChartBarIcon className="w-6 h-6" />}
-                title="Compteur de r√©alisations"
-                description="Consulte le nombre total de fois o√π tu as accompli tes principales habitudes."
+                title="Compteur de rÈalisations"
+                description="Consulte le nombre total de fois o˘ tu as accompli tes principales habitudes."
               />
             </div>
           </div>
@@ -182,22 +182,22 @@ export default function Page() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className={`text-3xl lg:text-4xl font-bold text-foreground mb-4 ${josefinSans.className}`}>
-                D√©fie-toi et d√©passe tes limites
+                DÈfie-toi et dÈpasse tes limites
               </h2>
               <p className="text-xl text-foreground-secondary max-w-3xl mx-auto">
-                Participe au classement mondial et booste ta productivit√© avec les sessions Focus
+                Participe au classement mondial et booste ta productivitÈ avec les sessions Focus
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               <FeatureCard
                 icon={<TrophyIcon className="w-6 h-6" />}
                 title="Classement mondial"
-                description="Compare-toi √† d'autres joueurs et grimpe dans le classement mondial."
+                description="Compare-toi ‡ d'autres joueurs et grimpe dans le classement mondial."
               />
               <FeatureCard
                 icon={<UserGroupIcon className="w-6 h-6" />}
                 title="Top joueurs"
-                description="D√©couvre les meilleurs joueurs et leurs h√©rissons pour t'inspirer."
+                description="DÈcouvre les meilleurs joueurs et leurs hÈrissons pour t'inspirer."
               />
               <FeatureCard
                 icon={<ClockIcon className="w-6 h-6" />}
@@ -206,8 +206,8 @@ export default function Page() {
               />
               <FeatureCard
                 icon={<GiftIcon className="w-6 h-6" />}
-                title="R√©compenses Focus"
-                description="Gagne des r√©compenses exclusives lors de tes phases de concentration intense."
+                title="RÈcompenses Focus"
+                description="Gagne des rÈcompenses exclusives lors de tes phases de concentration intense."
               />
             </div>
           </div>
@@ -217,17 +217,17 @@ export default function Page() {
         <section className="py-20 bg-gradient-to-r from-primary-500 to-primary-600">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className={`text-3xl lg:text-4xl font-bold text-background mb-6 ${josefinSans.className}`}>
-              Pr√™t √† transformer tes habitudes ?
+              PrÍt ‡ transformer tes habitudes ?
             </h2>
             <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-              Rejoins Habit&apos;Hisson et commence ton aventure d√®s aujourd&apos;hui. 
-              Ton h√©risson t&apos;attend ! 
+              Rejoins Habit&apos;Hisson et commence ton aventure dËs aujourd&apos;hui. 
+              Ton hÈrisson t&apos;attend ! 
             </p>
             <Link 
               href="/dashboard"
               className="inline-flex items-center bg-background text-primary-600 px-8 py-4 rounded-lg hover:bg-background-muted transition-colors font-bold text-lg shadow-lg"
             >
-              Cr√©er mon compte gratuitement
+              CrÈer mon compte gratuitement
             </Link>
           </div>
         </section>
@@ -238,13 +238,13 @@ export default function Page() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <span className="text-2xl">ü¶î</span>
+              <span className="text-2xl">??</span>
               <span className={`text-xl font-bold ${josefinSans.className}`}>
                 Habit&apos;Hisson
               </span>
             </div>
             <p className="text-foreground-muted">
-               2025 Habit&apos;Hisson. Tous droits r√©serv√©s.
+              © 2025 Habit&apos;Hisson. Tous droits rÈservÈs.
             </p>
           </div>
         </div>
