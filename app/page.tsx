@@ -1,55 +1,274 @@
-import AcmeLogo from '@/app/ui/acme-logo';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts';
-import Image from 'next/image';
-
-
-
-import styles from '@/app/ui/home.module.css';
-
+import { 
+  ArrowRightIcon, 
+  SparklesIcon,
+  CalendarDaysIcon,
+  ChartBarIcon,
+  FireIcon,
+  UserGroupIcon,
+  TrophyIcon,
+  ClockIcon,
+  GiftIcon
+} from '@heroicons/react/24/outline';
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col p-6">
-      <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
-        <AcmeLogo />
-      </div>
-      <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-        <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
-          <p className={`text-xl text-gray-800 md:text-3xl md:leading-normal ${lusitana.className}`}>
-            <strong>Welcome to Acme.</strong> This is the example for the{' '}
-            <a href="https://nextjs.org/learn/" className="text-blue-500">
-              Next.js Learn Course
-            </a>
-            , brought to you by Vercel.
-          </p>
-          <Link
-            href="/login"
-            className="flex items-center gap-5 self-start rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
-          >
-            <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
-          </Link>
+    <div className="min-h-screen bg-gradient-to-b from-background-accent to-background">
+      {/* Header */}
+      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">🦔</span>
+              <span className={`text-xl font-bold text-foreground ${lusitana.className}`}>
+                Habit&apos;Hisson
+              </span>
+            </div>
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link href="#fonctionnalites" className="text-foreground-secondary hover:text-foreground transition-colors">
+                Fonctionnalités
+              </Link>
+              <Link href="#roadmap" className="text-foreground-secondary hover:text-foreground transition-colors">
+                Roadmap
+              </Link>
+              <Link 
+                href="/login" 
+                className="bg-primary-500 text-background px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors"
+              >
+                Se connecter
+              </Link>
+            </nav>
+          </div>
         </div>
-        <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
-          {/* Add Hero Images Here */}
-          <Image
-            src="/hero-desktop.png"
-            width={1000}
-            height={760}
-            className="hidden md:block"
-            alt="Screenshots of the dashboard project showing desktop version"
-          />
-          <Image
-            src="/hero-mobile.png"
-            width={560}
-            height={620}
-            className="block md:hidden"
-            alt="Screenshots of the dashboard project showing desktop version"
-          />
+      </header>
+
+      <main>
+        {/* Hero Section */}
+        <section className="py-20 lg:py-32">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+              <div className="mb-12 lg:mb-0">
+                <div className="inline-flex items-center space-x-2 bg-primary-100 text-foreground-accent px-3 py-1 rounded-full text-sm mb-6">
+                  <SparklesIcon className="w-4 h-4" />
+                  <span>Transforme tes habitudes en aventure</span>
+                </div>
+                <h1 className={`text-4xl lg:text-6xl font-bold text-foreground mb-6 ${lusitana.className}`}>
+                  Habit&apos;Hisson
+                </h1>
+                <p className="text-xl text-foreground-secondary mb-8 leading-relaxed">
+                  Développe tes meilleures habitudes en prenant soin de ton hérisson virtuel. 
+                  Suis tes progrès avec un compagnon qui grandit à ton rythme ! 
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link 
+                    href="/dashboard"
+                    className="inline-flex items-center justify-center bg-primary-500 text-background px-6 py-3 rounded-lg hover:bg-primary-600 transition-colors font-medium shadow-md"
+                  >
+                    Commencer l&apos;aventure
+                    <ArrowRightIcon className="w-5 h-5 ml-2" />
+                  </Link>
+                  <button className="inline-flex items-center justify-center border border-border text-foreground-secondary px-6 py-3 rounded-lg hover:bg-background-muted transition-colors font-medium">
+                    En savoir plus
+                  </button>
+                </div>
+              </div>
+              <div className="relative">
+                <div className="bg-gradient-to-br from-info-bg to-success-bg rounded-3xl p-8 flex items-center justify-center h-96 border border-border-accent">
+                  <div className="text-center">
+                    <div className="text-8xl mb-4">🦔</div>
+                    <p className="text-foreground-secondary">Votre compagnon hérisson vous attend !</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Phase 1 Features */}
+        <section id="fonctionnalites" className="py-20 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className={`text-3xl lg:text-4xl font-bold text-foreground mb-4 ${lusitana.className}`}>
+                Suivi intelligent de tes habitudes
+              </h2>
+              <p className="text-xl text-foreground-secondary max-w-3xl mx-auto">
+                Crée, suis et analyse tes habitudes avec des outils simples et intuitifs
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <FeatureCard
+                icon={<SparklesIcon className="w-6 h-6" />}
+                title="Habitudes personnalisées"
+                description="Crée tes habitudes avec emoji, nom, fréquence (quotidienne/hebdomadaire) et type (bonne/mauvaise habitude)."
+              />
+              <FeatureCard
+                icon={<CalendarDaysIcon className="w-6 h-6" />}
+                title="Suivi quotidien"
+                description="Coche tes habitudes chaque jour ou semaine et garde une trace de tous tes accomplissements."
+              />
+              <FeatureCard
+                icon={<ChartBarIcon className="w-6 h-6" />}
+                title="Calendrier visuel"
+                description="Visualise toutes tes habitudes sur un calendrier intuitif avec des pastilles colorées."
+              />
+              <FeatureCard
+                icon={<FireIcon className="w-6 h-6" />}
+                title="Streaks motivants"
+                description="Suis tes séries de jours réussis et reste motivé avec des statistiques encourageantes."
+              />
+              <FeatureCard
+                icon={<ClockIcon className="w-6 h-6" />}
+                title="Rattrapage flexible"
+                description="Rattrape les oublis du jour précédent au démarrage d'un nouveau jour."
+              />
+              <FeatureCard
+                icon={<ChartBarIcon className="w-6 h-6" />}
+                title="Graphiques de productivité"
+                description="Analyse ta progression avec des graphiques détaillés et des insights personnalisés."
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Phase 2 Gamification */}
+        <section className="py-20 bg-gradient-to-br from-background-accent to-warning-bg">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className={`text-3xl lg:text-4xl font-bold text-foreground mb-4 ${lusitana.className}`}>
+                Un compagnon qui grandit avec toi
+              </h2>
+              <p className="text-xl text-foreground-secondary max-w-3xl mx-auto">
+                Ton hérisson évolue au rythme de tes progrès dans un monde virtuel immersif
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <FeatureCard
+                icon={<SparklesIcon className="w-6 h-6" />}
+                title="Système d'XP"
+                description="Gagne de l'expérience à chaque habitude accomplie et fais progresser ton niveau."
+              />
+              <FeatureCard
+                icon={<span className="text-2xl">🦔</span>}
+                title="Hérisson évolutif"
+                description="Ton hérisson grandit à chaque niveau, rendant ta progression visible et amusante."
+              />
+              <FeatureCard
+                icon={<GiftIcon className="w-6 h-6" />}
+                title="Nourrir ton hérisson"
+                description="Récompense ton compagnon virtuel avec de la nourriture à chaque succès."
+              />
+              <FeatureCard
+                icon={<span className="text-2xl">🏠</span>}
+                title="Décors déblocables"
+                description="Débloque des éléments de décor à chaque nouveau niveau pour personnaliser l'environnement."
+              />
+              <FeatureCard
+                icon={<span className="text-2xl">🌳</span>}
+                title="Habitudes et décor liés"
+                description="Associe tes tâches à des éléments du décor pour créer des liens significatifs."
+              />
+              <FeatureCard
+                icon={<ChartBarIcon className="w-6 h-6" />}
+                title="Compteur de réalisations"
+                description="Consulte le nombre total de fois où tu as accompli tes principales habitudes."
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Phase 3 Competition */}
+        <section className="py-20 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className={`text-3xl lg:text-4xl font-bold text-foreground mb-4 ${lusitana.className}`}>
+                Défie-toi et dépasse tes limites
+              </h2>
+              <p className="text-xl text-foreground-secondary max-w-3xl mx-auto">
+                Participe au classement mondial et booste ta productivité avec les sessions Focus
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <FeatureCard
+                icon={<TrophyIcon className="w-6 h-6" />}
+                title="Classement mondial"
+                description="Compare-toi à d'autres joueurs et grimpe dans le classement mondial."
+              />
+              <FeatureCard
+                icon={<UserGroupIcon className="w-6 h-6" />}
+                title="Top joueurs"
+                description="Découvre les meilleurs joueurs et leurs hérissons pour t'inspirer."
+              />
+              <FeatureCard
+                icon={<ClockIcon className="w-6 h-6" />}
+                title="Sessions Focus"
+                description="Lance des sessions de concentration (style Pomodoro) pour gagner des points bonus."
+              />
+              <FeatureCard
+                icon={<GiftIcon className="w-6 h-6" />}
+                title="Récompenses Focus"
+                description="Gagne des récompenses exclusives lors de tes phases de concentration intense."
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-r from-primary-500 to-primary-600">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className={`text-3xl lg:text-4xl font-bold text-background mb-6 ${lusitana.className}`}>
+              Prêt à transformer tes habitudes ?
+            </h2>
+            <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
+              Rejoins Habit&apos;Hisson et commence ton aventure dès aujourd&apos;hui. 
+              Ton hérisson t&apos;attend ! 
+            </p>
+            <Link 
+              href="/dashboard"
+              className="inline-flex items-center bg-background text-primary-600 px-8 py-4 rounded-lg hover:bg-background-muted transition-colors font-bold text-lg shadow-lg"
+            >
+              Créer mon compte gratuitement
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-primary-950 text-background py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+              <span className="text-2xl">🦔</span>
+              <span className={`text-xl font-bold ${lusitana.className}`}>
+                Habit&apos;Hisson
+              </span>
+            </div>
+            <p className="text-foreground-muted">
+              © 2025 Habit&apos;Hisson. Tous droits réservés.
+            </p>
+          </div>
         </div>
-        <div className={styles.shape} />
+      </footer>
+    </div>
+  );
+}
+
+function FeatureCard({ icon, title, description }: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="bg-background rounded-xl p-6 shadow-sm border border-border hover:shadow-md transition-shadow hover:border-border-accent">
+      <div className="flex items-start space-x-4">
+        <div className="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600">
+          {icon}
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
+          <p className="text-foreground-secondary leading-relaxed">{description}</p>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,0 +1,193 @@
+// Schema Prisma pour Habit'Hisson 🦔
+// Base de données pour l'application de suivi d'habitudes avec gamification
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ========== MODÈLES UTILISATEUR ==========
+
+model User {
+  id       String @id @default(cuid())
+  email    String @unique
+  name     String
+  password String
+
+  // Relations
+  habits        Habit[]
+  habitLogs     HabitLog[]
+  userProgress  UserProgress?
+  focusSessions FocusSession[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ========== MODÈLES HABITUDES (Phase 1 MVP) ==========
+
+model Habit {
+  id           String      @id @default(cuid())
+  userId       String
+  name         String
+  emoji        String      @default("⭐")
+  description  String?
+  type         HabitType   @default(GOOD)
+  frequency    Frequency   @default(DAILY)
+  targetCount  Int         @default(1) // Pour les habitudes avec compteur
+  isActive     Boolean     @default(true)
+  
+  // Relations
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs      HabitLog[]
+  
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("habits")
+  @@index([userId])
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  habitId   String
+  userId    String
+  date      DateTime @db.Date
+  completed Boolean  @default(false)
+  count     Int      @default(0) // Pour les habitudes avec compteur
+  notes     String?
+
+  // Relations
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([habitId, date])
+  @@map("habit_logs")
+  @@index([userId, date])
+}
+
+// ========== GAMIFICATION (Phase 2) ==========
+
+model UserProgress {
+  id            String @id @default(cuid())
+  userId        String @unique
+  level         Int    @default(1)
+  xp            Int    @default(0)
+  totalXp       Int    @default(0)
+  
+  // État du hérisson
+  hedgehogSize  Int    @default(1) // Taille du hérisson (1-10)
+  hedgehogMood  String @default("happy") // État émotionnel
+  lastFed       DateTime?
+  
+  // Statistiques
+  totalHabitsCompleted Int @default(0)
+  currentStreak        Int @default(0)
+  longestStreak        Int @default(0)
+  
+  // Unlock & Décor (Phase 2)
+  unlockedDecorations Json @default("[]") // Array des décorations débloquées
+  selectedDecoration  String?
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user_progress")
+}
+
+// ========== SESSIONS FOCUS (Phase 3) ==========
+
+model FocusSession {
+  id             String        @id @default(cuid())
+  userId         String
+  duration       Int           // Durée en minutes
+  completed      Boolean       @default(false)
+  xpEarned       Int           @default(0)
+  sessionType    SessionType   @default(POMODORO)
+  startedAt      DateTime      @default(now())
+  completedAt    DateTime?
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("focus_sessions")
+  @@index([userId])
+}
+
+// ========== RÉCOMPENSES ET ACHIEVEMENTS ==========
+
+model Achievement {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  emoji       String @default("🏆")
+  xpReward    Int    @default(0)
+  
+  // Critères pour débloquer
+  requirements Json // Structure: {type: "streak", count: 7} ou {type: "total_habits", count: 100}
+  
+  createdAt DateTime @default(now())
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+  @@index([userId])
+}
+
+// ========== CLASSEMENTS (Phase 3) ==========
+
+model Leaderboard {
+  id       String @id @default(cuid())
+  userId   String
+  score    Int    @default(0)
+  period   String // "weekly", "monthly", "all-time"
+  week     Int?   // Semaine ISO
+  month    Int?   // Mois (1-12)
+  year     Int    // Année
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, period, week, month, year])
+  @@map("leaderboards")
+  @@index([period, score])
+}
+
+// ========== ENUMS ==========
+
+enum HabitType {
+  GOOD // Bonne habitude à maintenir
+  BAD  // Mauvaise habitude à éviter
+}
+
+enum Frequency {
+  DAILY   // Quotidienne
+  WEEKLY  // Hebdomadaire
+  CUSTOM  // Personnalisée (pour le futur)
+}
+
+enum SessionType {
+  POMODORO  // 25 minutes
+  DEEP_WORK // 90 minutes
+  CUSTOM    // Durée personnalisée
+}
