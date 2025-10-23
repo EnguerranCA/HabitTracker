@@ -15,6 +15,9 @@ export type State = {
     name?: string[];
     email?: string[];
     password?: string[];
+      emoji?: string[];
+    frequency?: string[];
+    type?: string[];
   };
   message: string;
 };
@@ -132,4 +135,66 @@ export async function deleteUser(id: string) {
     console.error("Database Error:", error);
     return { message: "Database Error: Failed to Delete User." };
   }
+}
+
+// ========== ACTIONS POUR LES HABITUDES ==========
+
+const HabitFormSchema = z.object({
+  id: z.string(),
+  name: z.string({
+    invalid_type_error: "Veuillez entrer un nom d'habitude.",
+  }).min(1, "Le nom de l'habitude est requis.").max(50, "Le nom ne peut pas dépasser 50 caractères."),
+  emoji: z.string({
+    invalid_type_error: "Veuillez sélectionner un emoji.",
+  }).min(1, "Un emoji est requis."),
+  frequency: z.enum(['DAILY', 'WEEKLY'], {
+    invalid_type_error: "Veuillez sélectionner une fréquence valide.",
+  }),
+  type: z.enum(['GOOD', 'BAD'], {
+    invalid_type_error: "Veuillez sélectionner un type d'habitude valide.",
+  }),
+});
+
+const CreateHabit = HabitFormSchema.omit({ id: true });
+
+export async function createHabit(prevState: State, formData: FormData) {
+  // Validation des données du formulaire
+  const validatedFields = CreateHabit.safeParse({
+    name: formData.get('name'),
+    emoji: formData.get('emoji'),
+    frequency: formData.get('frequency'),
+    type: formData.get('type'),
+  });
+
+  // Si la validation échoue, retourner les erreurs
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Champs manquants. Impossible de créer l\'habitude.',
+    };
+  }
+
+  // Extraire les données validées
+  const { name, emoji, frequency, type } = validatedFields.data;
+
+  try {
+    // Pour l'instant, on utilise un userId factice
+    // TODO: Récupérer l'userId de la session authentifiée
+    const userId = 'user_2mkKvT8TFxWJsTpUPB1rR1234'; // Remplacer par l'userId réel
+    
+    // Insérer la nouvelle habitude en base
+    await sql`
+      INSERT INTO habits (user_id, name, emoji, frequency, type)
+      VALUES (${userId}, ${name}, ${emoji}, ${frequency}, ${type})
+    `;
+  } catch (error) {
+    console.error('Database Error:', error);
+    return {
+      message: 'Erreur de base de données : Impossible de créer l\'habitude.',
+    };
+  }
+
+  // Revalider la page et rediriger
+  revalidatePath('/dashboard/habits');
+  redirect('/dashboard/habits?success=created');
 }

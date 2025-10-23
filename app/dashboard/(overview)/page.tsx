@@ -1,4 +1,5 @@
 import { josefinSans } from '@/app/ui/fonts';
+import Link from 'next/link';
 
 export default async function Page() {
   return (
@@ -24,9 +25,11 @@ export default async function Page() {
               Mes habitudes
             </h3>
           </div>
-          <p className="truncate rounded-xl bg-info-bg px-4 py-8 text-center text-2xl border border-info/20">
-            📚 5 habitudes actives
-          </p>
+          <Link href="/dashboard/habits" className="block">
+            <p className="truncate rounded-xl bg-info-bg px-4 py-8 text-center text-2xl border border-info/20 hover:bg-info-bg/80 transition-colors">
+              📚 Gérer mes habitudes
+            </p>
+          </Link>
         </div>
         
         <div className="rounded-xl bg-background border border-border p-4 shadow-md">
@@ -54,12 +57,11 @@ export default async function Page() {
       
       <div className="mt-8 rounded-xl bg-background border border-border p-6 shadow-md">
         <h2 className={`${josefinSans.className} mb-4 text-lg text-foreground`}>
-          Mode Développement Actif
+          Bienvenue dans Habit'Hisson ! 🦔
         </h2>
         <p className="text-foreground-secondary">
-          L'authentification est temporairement désactivée pour permettre le développement 
-          sans dépendance à la base de données Vercel. Toutes les fonctionnalités de base 
-          sont accessibles pour tester l'interface.
+          Commencez à créer vos habitudes et suivez la croissance de votre hérisson virtuel. 
+          Chaque habitude accomplie vous rapporte des glands pour nourrir et faire grandir votre compagnon !
         </p>
       </div>
     </main>
