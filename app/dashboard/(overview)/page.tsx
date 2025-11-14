@@ -1,9 +1,11 @@
 import { josefinSans } from '@/app/ui/fonts';
 import { fetchUserHabits } from '@/app/lib/data';
 import QuickCreateFormClient from '@/app/ui/habits/quick-create-form-client';
+import InteractiveHabitsList from '@/app/ui/habits/interactive-habits-list';
 
 export default async function Page() {
   const habits = await fetchUserHabits();
+  const completedToday = habits.filter((h) => h.isCompletedToday).length;
 
   return (
     <main>
@@ -30,7 +32,7 @@ export default async function Page() {
             </h3>
           </div>
           <p className="truncate rounded-xl bg-primary-50 px-4 py-8 text-center text-2xl border border-primary-200">
-            🦔 {habits.length} habitude{habits.length > 1 ? 's' : ''}
+            🦔 {completedToday}/{habits.length} terminées
           </p>
         </div>
         
@@ -57,46 +59,8 @@ export default async function Page() {
         </div> */}
       </div>
       
-      {/* Liste des habitudes */}
-      {habits && habits.length > 0 && (
-        <div className="mt-6 rounded-xl bg-background border border-border p-6 shadow-md">
-          <h3 className={`${josefinSans.className} text-lg font-semibold text-foreground mb-4 flex items-center gap-2`}>
-            <span className="text-xl">📋</span>
-            Mes habitudes du jour
-          </h3>
-          
-          <div className="space-y-3">
-            {habits.map((habit: any) => (
-              <div
-                key={habit.id}
-                className="flex items-center justify-between p-4 rounded-lg border bg-background border-border"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{habit.emoji}</span>
-                  
-                  <div>
-                    <p className="font-medium text-foreground">
-                      {habit.name}
-                    </p>
-                    <div className="flex items-center gap-2 text-xs text-foreground-secondary">
-                      <span className={`px-2 py-1 rounded-full ${
-                        habit.type === 'GOOD' 
-                          ? 'bg-green-100 text-green-700' 
-                          : 'bg-red-100 text-red-700'
-                      }`}>
-                        {habit.type === 'GOOD' ? '✅ Bonne' : '❌ Mauvaise'}
-                      </span>
-                      <span className="px-2 py-1 bg-background-muted rounded-full">
-                        {habit.frequency === 'DAILY' ? '📅 Quotidien' : '📆 Hebdomadaire'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Liste des habitudes interactives */}
+      <InteractiveHabitsList initialHabits={habits} />
       
       <div className="mt-8 rounded-xl bg-background border border-border p-6 shadow-md">
         <h2 className={`${josefinSans.className} mb-4 text-lg text-foreground`}>

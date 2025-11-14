@@ -23,7 +23,7 @@ interface DashboardHabitsClientProps {
 }
 
 export default function DashboardHabitsClient({ initialHabits }: DashboardHabitsClientProps) {
-  const [habits, setHabits] = useState(initialHabits);
+  const habits = initialHabits;
 
   const handleToggleHabit = async (habitId: string, completed: boolean) => {
     try {
@@ -32,11 +32,6 @@ export default function DashboardHabitsClient({ initialHabits }: DashboardHabits
     } catch (error) {
       console.error('Erreur lors du toggle:', error);
     }
-  };
-
-  const onHabitCreated = () => {
-    // Rafraîchir la page pour récupérer les nouvelles habitudes
-    window.location.reload();
   };
 
   return (

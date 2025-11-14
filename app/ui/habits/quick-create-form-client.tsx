@@ -20,7 +20,7 @@ export default function QuickCreateFormClient() {
 
   // Gérer le succès de la création
   useEffect(() => {
-    if ((state as any).success) {
+    if ('success' in state && state.success) {
       // Réinitialiser le formulaire
       setSelectedEmoji('📚');
       setHabitName('');
@@ -87,9 +87,9 @@ export default function QuickCreateFormClient() {
       </Button>
 
       {/* Affichage des erreurs */}
-      {(state as any).errors?.name && (
+      {'errors' in state && state.errors?.name && (
         <div className="absolute top-full left-0 mt-1 text-xs text-red-500">
-          {(state as any).errors.name[0]}
+          {state.errors.name[0]}
         </div>
       )}
     </form>

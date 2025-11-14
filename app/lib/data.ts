@@ -92,17 +92,34 @@ export async function fetchUserHabits(userId?: string) {
       targetUserId = firstUser.id;
     }
 
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+
     const habits = await prisma.habit.findMany({
       where: {
         userId: targetUserId,
         isActive: true,
+      },
+      include: {
+        logs: {
+          where: {
+            date: new Date(todayString),
+          },
+          take: 1,
+        },
       },
       orderBy: {
         createdAt: 'desc',
       },
     });
 
-    return habits;
+    // Enrichir les habitudes avec l'information de complétion du jour
+    const habitsWithCompletionStatus = habits.map(habit => ({
+      ...habit,
+      isCompletedToday: habit.logs.length > 0 && habit.logs[0].completed,
+    }));
+
+    return habitsWithCompletionStatus;
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch user habits.");

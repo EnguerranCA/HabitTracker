@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useActionState } from 'react';
 import Link from 'next/link';
 import {
@@ -12,7 +12,6 @@ import {
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createHabit } from '@/app/lib/actions';
-import { josefinSans } from '@/app/ui/fonts';
 
 // Liste d'emojis prédéfinis pour les habitudes
 const HABIT_EMOJIS = [
@@ -38,7 +37,7 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
         {/* Nom de l'habitude */}
         <div className="mb-4">
           <label htmlFor="name" className="mb-2 block text-sm font-medium text-foreground">
-            Nom de l'habitude *
+            Nom de l&apos;habitude *
           </label>
           <div className="relative">
             <input
@@ -71,7 +70,7 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
         {/* Sélecteur d'emoji */}
         <div className="mb-4">
           <label className="mb-2 block text-sm font-medium text-foreground">
-            Emoji de l'habitude *
+            Emoji de l&apos;habitude *
           </label>
           <input type="hidden" name="emoji" value={selectedEmoji} />
           <div className="grid grid-cols-8 md:grid-cols-12 gap-2 p-4 border border-border rounded-md bg-background-muted">
@@ -148,7 +147,7 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
         {/* Type d'habitude */}
         <div className="mb-4">
           <legend className="mb-2 block text-sm font-medium text-foreground">
-            Type d'habitude *
+            Type d&apos;habitude *
           </legend>
           <div className="rounded-md border border-border bg-background-muted px-[14px] py-3">
             <div className="flex gap-4">
@@ -225,7 +224,7 @@ export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
         )}
         <Button type="submit" className="flex h-10 items-center rounded-lg bg-primary-600 px-4 text-sm font-medium text-white transition-colors hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50">
           <CheckIcon className="h-4 w-4 mr-2" />
-          Créer l'habitude
+          Créer l&apos;habitude
         </Button>
       </div>
     </form>

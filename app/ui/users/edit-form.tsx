@@ -18,7 +18,8 @@ export default function EditUserForm({
   user: UserForm;
 }) {
   const initialState = { message: '', errors: {} };
-  const [state, dispatch] = useFormState(updateUser, initialState);
+  const updateUserWithId = updateUser.bind(null, user.id);
+  const [, dispatch] = useFormState(updateUserWithId, initialState);
 
   return (
     <form action={dispatch}>

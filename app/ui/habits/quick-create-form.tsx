@@ -24,7 +24,7 @@ export default function QuickCreateForm({ onSuccess }: QuickCreateFormProps) {
 
   // Gérer le succès de la création
   useEffect(() => {
-    if ((state as any).success && onSuccess) {
+    if ('success' in state && state.success && onSuccess) {
       // Réinitialiser le formulaire
       setSelectedEmoji('📚');
       setHabitName('');

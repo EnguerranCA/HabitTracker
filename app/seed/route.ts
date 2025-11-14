@@ -4,6 +4,7 @@ import { invoices, customers, revenue, users } from '../lib/placeholder-data';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function seedUsers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
   await sql`
@@ -29,6 +30,7 @@ async function seedUsers() {
   return insertedUsers;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function seedInvoices() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -55,6 +57,7 @@ async function seedInvoices() {
   return insertedInvoices;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function seedCustomers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -80,6 +83,7 @@ async function seedCustomers() {
   return insertedCustomers;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function seedRevenue() {
   await sql`
     CREATE TABLE IF NOT EXISTS revenue (
