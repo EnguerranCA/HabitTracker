@@ -1,4 +1,5 @@
 ﻿import postgres from "postgres";
+import { prisma } from "./prisma";
 import {
   UsersTable,
   UserForm,
@@ -74,5 +75,55 @@ export async function fetchUserById(id: string) {
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch user.");
+  }
+}
+
+// ========== FONCTIONS HABITUDES ==========
+
+export async function fetchUserHabits(userId?: string) {
+  try {
+    // Si pas d'userId fourni, prendre le premier utilisateur disponible
+    let targetUserId = userId;
+    if (!targetUserId) {
+      const firstUser = await prisma.user.findFirst();
+      if (!firstUser) {
+        return [];
+      }
+      targetUserId = firstUser.id;
+    }
+
+    const habits = await prisma.habit.findMany({
+      where: {
+        userId: targetUserId,
+        isActive: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return habits;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch user habits.");
+  }
+}
+
+export async function fetchHabitLogsForToday(habitId: string) {
+  try {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+
+    const log = await prisma.habitLog.findFirst({
+      where: {
+        habitId,
+        date: new Date(todayString),
+      },
+    });
+
+    return log;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch habit log for today.");
   }
 }

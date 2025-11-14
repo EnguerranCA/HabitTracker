@@ -8,12 +8,12 @@ export default function HabitHissonLogo() {
     >
       <Image 
         src="/herisson-face.png"
-        alt="Hérisson Habit'Hisson"
+        alt="Hérisson Habit&apos;Hisson"
         width={48}
         height={48}
         className="mr-3"
       />
-      <p className="text-[32px] md:text-[38px]">Habit'Hisson</p>
+      <p className="text-[32px] md:text-[38px]">Habit&apos;Hisson</p>
     </div>
   );
 }

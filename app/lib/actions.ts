@@ -7,6 +7,7 @@ import postgres from "postgres";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
+import { prisma } from "./prisma";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
@@ -15,11 +16,12 @@ export type State = {
     name?: string[];
     email?: string[];
     password?: string[];
-      emoji?: string[];
+    emoji?: string[];
     frequency?: string[];
     type?: string[];
   };
   message: string;
+  success?: boolean;
 };
 
 const UserFormSchema = z.object({
@@ -178,15 +180,26 @@ export async function createHabit(prevState: State, formData: FormData) {
   const { name, emoji, frequency, type } = validatedFields.data;
 
   try {
-    // Pour l'instant, on utilise un userId factice
+    // Pour l'instant, on récupère le premier utilisateur disponible
     // TODO: Récupérer l'userId de la session authentifiée
-    const userId = 'user_2mkKvT8TFxWJsTpUPB1rR1234'; // Remplacer par l'userId réel
+    const existingUser = await prisma.user.findFirst();
     
-    // Insérer la nouvelle habitude en base
-    await sql`
-      INSERT INTO habits (user_id, name, emoji, frequency, type)
-      VALUES (${userId}, ${name}, ${emoji}, ${frequency}, ${type})
-    `;
+    if (!existingUser) {
+      return {
+        message: 'Aucun utilisateur trouvé. Veuillez vous connecter.',
+      };
+    }
+    
+    // Créer la nouvelle habitude avec Prisma
+    await prisma.habit.create({
+      data: {
+        userId: existingUser.id,
+        name,
+        emoji,
+        frequency: frequency as 'DAILY' | 'WEEKLY',
+        type: type as 'GOOD' | 'BAD',
+      },
+    });
   } catch (error) {
     console.error('Database Error:', error);
     return {
@@ -195,6 +208,114 @@ export async function createHabit(prevState: State, formData: FormData) {
   }
 
   // Revalider la page et rediriger
-  revalidatePath('/dashboard/habits');
-  redirect('/dashboard/habits?success=created');
+  revalidatePath('/dashboard');
+  redirect('/dashboard?success=created');
+}
+
+export async function createHabitFromDashboard(prevState: State, formData: FormData) {
+  // Même validation que createHabit
+  const validatedFields = CreateHabit.safeParse({
+    name: formData.get('name'),
+    emoji: formData.get('emoji'),
+    frequency: formData.get('frequency'),
+    type: formData.get('type'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Champs manquants. Impossible de créer l\'habitude.',
+    };
+  }
+
+  const { name, emoji, frequency, type } = validatedFields.data;
+
+  try {
+    const existingUser = await prisma.user.findFirst();
+    
+    if (!existingUser) {
+      return {
+        message: 'Aucun utilisateur trouvé. Veuillez vous connecter.',
+      };
+    }
+    
+    // Créer la nouvelle habitude avec Prisma
+    await prisma.habit.create({
+      data: {
+        userId: existingUser.id,
+        name,
+        emoji,
+        frequency: frequency as 'DAILY' | 'WEEKLY',
+        type: type as 'GOOD' | 'BAD',
+      },
+    });
+
+    // Revalider la page mais ne pas rediriger
+    revalidatePath('/dashboard');
+    
+    return {
+      message: 'Habitude créée avec succès !',
+      success: true,
+    };
+  } catch (error) {
+    console.error('Database Error:', error);
+    return {
+      message: 'Erreur de base de données : Impossible de créer l\'habitude.',
+    };
+  }
+}
+
+export async function toggleHabitCompletion(habitId: string, completed: boolean) {
+  try {
+    const today = new Date();
+    const todayString = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+    
+    // Vérifier si l'habitude existe
+    const habit = await prisma.habit.findUnique({
+      where: { id: habitId },
+    });
+
+    if (!habit) {
+      throw new Error('Habitude non trouvée');
+    }
+
+    // Chercher ou créer le log pour aujourd'hui
+    const existingLog = await prisma.habitLog.findFirst({
+      where: {
+        habitId,
+        date: new Date(todayString),
+      },
+    });
+
+    if (existingLog) {
+      // Mettre à jour le log existant
+      await prisma.habitLog.update({
+        where: { id: existingLog.id },
+        data: {
+          completed,
+          count: completed ? 1 : 0,
+          updatedAt: new Date(),
+        },
+      });
+    } else {
+      // Créer un nouveau log
+      await prisma.habitLog.create({
+        data: {
+          habitId,
+          userId: habit.userId,
+          date: new Date(todayString),
+          completed,
+          count: completed ? 1 : 0,
+        },
+      });
+    }
+
+    // Revalider la page pour mettre à jour l'affichage
+    revalidatePath('/dashboard');
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Erreur lors du toggle de l\'habitude:', error);
+    throw new Error('Erreur lors de la mise à jour de l\'habitude');
+  }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useActionState } from 'react';
 import Link from 'next/link';
 import {
@@ -22,7 +22,11 @@ const HABIT_EMOJIS = [
   '☕', '🍎', '🥕', '🥛', '🧽', '📖'
 ];
 
-export default function CreateHabitForm() {
+interface CreateHabitFormProps {
+  onSuccess?: () => void;
+}
+
+export default function CreateHabitForm({ onSuccess }: CreateHabitFormProps) {
   const initialState = { message: '', errors: {} };
   const [state, formAction] = useActionState(createHabit, initialState);
   const [selectedEmoji, setSelectedEmoji] = useState('📚');
@@ -203,12 +207,22 @@ export default function CreateHabitForm() {
       </div>
 
       <div className="mt-6 flex justify-end gap-4">
-        <Link
-          href="/dashboard/habits"
-          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
-        >
-          Annuler
-        </Link>
+        {onSuccess ? (
+          <button
+            type="button"
+            onClick={onSuccess}
+            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+          >
+            Annuler
+          </button>
+        ) : (
+          <Link
+            href="/dashboard/habits"
+            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+          >
+            Annuler
+          </Link>
+        )}
         <Button type="submit" className="flex h-10 items-center rounded-lg bg-primary-600 px-4 text-sm font-medium text-white transition-colors hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50">
           <CheckIcon className="h-4 w-4 mr-2" />
           Créer l'habitude
