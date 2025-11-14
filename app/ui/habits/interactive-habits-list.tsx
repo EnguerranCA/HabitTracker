@@ -12,7 +12,7 @@ interface HabitWithCompletion {
   type: 'GOOD' | 'BAD';
   frequency: 'DAILY' | 'WEEKLY' | 'CUSTOM';
   isCompletedToday: boolean;
-  logs: any[];
+  logs: { id: string; habitId: string; date: Date; completed: boolean }[];
 }
 
 interface InteractiveHabitsListProps {
@@ -141,7 +141,7 @@ export default function InteractiveHabitsList({ initialHabits }: InteractiveHabi
         <div className="mt-4 p-4 bg-success-bg border border-success/30 rounded-lg text-center">
           <span className="text-2xl mb-2 block">🎉</span>
           <p className="text-success-foreground font-medium">
-            Félicitations ! Toutes vos habitudes sont accomplies aujourd'hui !
+            Félicitations ! Toutes vos habitudes sont accomplies aujourd&apos;hui !
           </p>
           <p className="text-success-foreground/70 text-sm mt-1">
             Votre hérisson est très fier de vous ! 🦔✨

@@ -55,8 +55,7 @@ export default function HabitsList({ habits, onToggleHabit }: HabitsListProps) {
     if (onToggleHabit) {
       try {
         await onToggleHabit(habitId, newCompletedState);
-      } catch (error) {
-              } catch (_error) {
+      } catch (_error) {
         // En cas d'erreur, on revert l'état
         setHabitsWithLogs(prev => 
           prev.map(h => 
