@@ -128,14 +128,13 @@ export async function updateUser(
   redirect("/dashboard/users");
 }
 
-export async function deleteUser(id: string) {
+export async function deleteUser(id: string): Promise<void> {
   try {
     await sql`DELETE FROM users WHERE id = ${id}`;
     revalidatePath("/dashboard/users");
-    return { message: "Deleted User." };
   } catch (error) {
     console.error("Database Error:", error);
-    return { message: "Database Error: Failed to Delete User." };
+    throw new Error("Database Error: Failed to Delete User.");
   }
 }
 
