@@ -1,31 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+
 import { josefinSans } from '@/app/ui/fonts';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import SuccessNotification from '@/app/ui/habits/success-notification';
 
 export default function Page() {
-  const searchParams = useSearchParams();
-  const [showSuccess, setShowSuccess] = useState(false);
-
-  useEffect(() => {
-    if (searchParams.get('success') === 'created') {
-      setShowSuccess(true);
-    }
-  }, [searchParams]);
 
   return (
     <div className="w-full">
-      {showSuccess && (
-        <SuccessNotification
-          message="🦔 Habitude créée avec succès ! Votre hérisson vous remercie !"
-          onClose={() => setShowSuccess(false)}
-        />
-      )}
-      
       <div className="flex w-full items-center justify-between">
         <h1 className={`${josefinSans.className} text-2xl text-foreground`}>
           Mes Habitudes 🌰
@@ -43,7 +26,7 @@ export default function Page() {
         </div>
         <Link
           href="/dashboard/habits/create"
-          className="flex h-10 items-center rounded-lg bg-primary-600 px-4 text-sm font-medium text-white transition-colors hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+          className="flex h-10 items-center rounded-lg bg-primary-600 px-4 text-sm font-medium text-white transition-colors hover:bg-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
         >
           <span className="hidden md:block">Créer une habitude</span>{' '}
           <PlusIcon className="h-5 md:ml-4" />

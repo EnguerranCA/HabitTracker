@@ -128,14 +128,13 @@ export async function updateUser(
   redirect("/dashboard/users");
 }
 
-export async function deleteUser(id: string) {
+export async function deleteUser(id: string): Promise<void> {
   try {
     await sql`DELETE FROM users WHERE id = ${id}`;
     revalidatePath("/dashboard/users");
-    return { message: "Deleted User." };
   } catch (error) {
     console.error("Database Error:", error);
-    return { message: "Database Error: Failed to Delete User." };
+    throw new Error("Database Error: Failed to Delete User.");
   }
 }
 
@@ -213,12 +212,15 @@ export async function createHabit(prevState: State, formData: FormData) {
 }
 
 export async function createHabitFromDashboard(prevState: State, formData: FormData) {
-  // Même validation que createHabit
+  // Transformation des valeurs pour correspondre au schéma
+  const rawFrequency = formData.get('frequency') as string;
+  const rawType = formData.get('type') as string;
+  
   const validatedFields = CreateHabit.safeParse({
     name: formData.get('name'),
     emoji: formData.get('emoji'),
-    frequency: formData.get('frequency'),
-    type: formData.get('type'),
+    frequency: rawFrequency?.toUpperCase(),
+    type: rawType?.toUpperCase(),
   });
 
   if (!validatedFields.success) {
@@ -254,7 +256,7 @@ export async function createHabitFromDashboard(prevState: State, formData: FormD
     revalidatePath('/dashboard');
     
     return {
-      message: 'Habitude créée avec succès !',
+      message: 'success',
       success: true,
     };
   } catch (error) {
@@ -363,6 +365,63 @@ export async function updateHabit(
 
   revalidatePath('/dashboard');
   redirect('/dashboard?success=updated');
+}
+
+export async function updateHabitFromDashboard(prevState: State, formData: FormData) {
+  // Récupérer l'ID de l'habitude à modifier
+  const habitId = formData.get('habitId') as string;
+  
+  if (!habitId) {
+    return {
+      message: 'ID de l\'habitude manquant.',
+    };
+  }
+
+  // Transformation des valeurs pour correspondre au schéma
+  const rawFrequency = formData.get('frequency') as string;
+  const rawType = formData.get('type') as string;
+  
+  const validatedFields = UpdateHabit.safeParse({
+    name: formData.get('name'),
+    emoji: formData.get('emoji'),
+    frequency: rawFrequency?.toUpperCase(),
+    type: rawType?.toUpperCase(),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Champs manquants. Impossible de modifier l\'habitude.',
+    };
+  }
+
+  const { name, emoji, frequency, type } = validatedFields.data;
+
+  try {
+    await prisma.habit.update({
+      where: { id: habitId },
+      data: {
+        name,
+        emoji,
+        frequency: frequency as 'DAILY' | 'WEEKLY',
+        type: type as 'GOOD' | 'BAD',
+        updatedAt: new Date(),
+      },
+    });
+
+    // Revalider la page mais ne pas rediriger
+    revalidatePath('/dashboard');
+    
+    return {
+      message: 'success',
+      success: true,
+    };
+  } catch (error) {
+    console.error('Database Error:', error);
+    return {
+      message: 'Erreur de base de données : Impossible de modifier l\'habitude.',
+    };
+  }
 }
 
 export async function deleteHabit(id: string) {

@@ -26,7 +26,7 @@ interface Habit {
   name: string;
   emoji: string;
   type: 'GOOD' | 'BAD';
-  frequency: 'DAILY' | 'WEEKLY';
+  frequency: 'DAILY' | 'WEEKLY' | 'CUSTOM';
 }
 
 interface EditHabitFormProps {
