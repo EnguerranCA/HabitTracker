@@ -319,3 +319,84 @@ export async function toggleHabitCompletion(habitId: string, completed: boolean)
     throw new Error('Erreur lors de la mise à jour de l\'habitude');
   }
 }
+
+const UpdateHabit = HabitFormSchema.omit({ id: true });
+
+export async function updateHabit(
+  id: string,
+  prevState: State,
+  formData: FormData,
+) {
+  const validatedFields = UpdateHabit.safeParse({
+    name: formData.get('name'),
+    emoji: formData.get('emoji'),
+    frequency: formData.get('frequency'),
+    type: formData.get('type'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Champs manquants. Impossible de modifier l\'habitude.',
+    };
+  }
+
+  const { name, emoji, frequency, type } = validatedFields.data;
+
+  try {
+    await prisma.habit.update({
+      where: { id },
+      data: {
+        name,
+        emoji,
+        frequency: frequency as 'DAILY' | 'WEEKLY',
+        type: type as 'GOOD' | 'BAD',
+        updatedAt: new Date(),
+      },
+    });
+  } catch (error) {
+    console.error('Database Error:', error);
+    return {
+      message: 'Erreur de base de données : Impossible de modifier l\'habitude.',
+    };
+  }
+
+  revalidatePath('/dashboard');
+  redirect('/dashboard?success=updated');
+}
+
+export async function deleteHabit(id: string) {
+  try {
+    // Vérifier d'abord que l'habitude existe et est active
+    const existingHabit = await prisma.habit.findUnique({
+      where: { 
+        id,
+        isActive: true, // S'assurer que l'habitude est active
+      },
+    });
+
+    if (!existingHabit) {
+      throw new Error('Habitude non trouvée ou déjà supprimée.');
+    }
+
+    // Utiliser le soft delete au lieu de la suppression physique
+    // Cela préserve l'historique des logs tout en masquant l'habitude
+    await prisma.habit.update({
+      where: { id },
+      data: {
+        isActive: false,
+        updatedAt: new Date(),
+      },
+    });
+
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Database Error:', error);
+    // Si c'est une erreur Prisma P2025 (record not found)
+    if (error instanceof Error && (error as any).code === 'P2025') {
+      throw new Error('Habitude non trouvée ou déjà supprimée.');
+    }
+    throw new Error('Erreur de base de données : Impossible de supprimer l\'habitude.');
+  }
+}

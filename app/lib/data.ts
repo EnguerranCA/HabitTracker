@@ -144,3 +144,19 @@ export async function fetchHabitLogsForToday(habitId: string) {
     throw new Error("Failed to fetch habit log for today.");
   }
 }
+
+export async function fetchHabitById(id: string) {
+  try {
+    const habit = await prisma.habit.findUnique({
+      where: {
+        id,
+        isActive: true,
+      },
+    });
+
+    return habit;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch habit.");
+  }
+}

@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { josefinSans } from '@/app/ui/fonts';
 import { toggleHabitCompletion } from '@/app/lib/actions';
+import { EditHabit, DeleteHabit } from './buttons';
 
 interface HabitWithCompletion {
   id: string;
@@ -54,6 +55,11 @@ export default function InteractiveHabitsList({ initialHabits }: InteractiveHabi
         );
       }
     });
+  };
+
+  const handleDelete = (habitId: string) => {
+    // Supprimer immédiatement l'habitude de l'état local
+    setHabits(prev => prev.filter(h => h.id !== habitId));
   };
 
   const completedCount = habits.filter(h => h.isCompletedToday).length;
@@ -128,11 +134,15 @@ export default function InteractiveHabitsList({ initialHabits }: InteractiveHabi
               </div>
             </div>
             
-            {habit.isCompletedToday && (
-              <div className="flex items-center gap-1 text-success">
-                <span className="text-sm font-medium">+10 🌰</span>
-              </div>
-            )}
+            <div className="flex items-center gap-2">
+              {habit.isCompletedToday && (
+                <div className="flex items-center gap-1 text-success mr-2">
+                  <span className="text-sm font-medium">+10 🌰</span>
+                </div>
+              )}
+              <EditHabit id={habit.id} />
+              <DeleteHabit id={habit.id} name={habit.name} onDelete={() => handleDelete(habit.id)} />
+            </div>
           </div>
         ))}
       </div>
