@@ -1,18 +1,101 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  delay: number;
+  targetX: number;
+  targetY: number;
+  deltaX: number;
+  deltaY: number;
+}
+
 interface HedgehogProps {
   score: number;
 }
 
 export default function Hedgehog({ score }: HedgehogProps) {
+  const [particles, setParticles] = useState<Particle[]>([]);
+
   const handleFeed = () => {
     // TODO: Implémenter la logique de nourrissage
     console.log('Nourrir le hérisson !');
   };
+
+  // Fonction pour déclencher l'animation des glands
+  const triggerNutAnimation = (fromX: number, fromY: number) => {
+    // Trouver la position du compteur de score
+    const scoreBadge = document.getElementById('score-badge');
+    if (!scoreBadge) return;
+    
+    const scoreBadgeRect = scoreBadge.getBoundingClientRect();
+    const targetX = scoreBadgeRect.left + scoreBadgeRect.width / 2;
+    const targetY = scoreBadgeRect.top + scoreBadgeRect.height / 2;
+    
+    const newParticles: Particle[] = [];
+    
+    // Créer 5-8 glands avec des positions et délais aléatoires
+    for (let i = 0; i < Math.floor(Math.random() * 4) + 5; i++) {
+      newParticles.push({
+        id: Date.now() + i,
+        x: fromX + (Math.random() - 0.5) * 60, // Spread autour de la position de départ
+        y: fromY + (Math.random() - 0.5) * 30,
+        delay: Math.random() * 200, // Délai random jusqu'à 200ms
+        targetX: targetX + (Math.random() - 0.5) * 20, // Petit spread autour du compteur
+        targetY: targetY + (Math.random() - 0.5) * 20,
+        deltaX: targetX - fromX,
+        deltaY: targetY - fromY,
+      });
+    }
+    
+    setParticles(prev => [...prev, ...newParticles]);
+    
+    // Effet sur le compteur quand les glands arrivent
+    setTimeout(() => {
+      const scoreBadge = document.getElementById('score-badge');
+      if (scoreBadge) {
+        scoreBadge.style.animation = 'score-bounce 0.6s ease-out';
+        setTimeout(() => {
+          scoreBadge.style.animation = '';
+        }, 600);
+      }
+    }, 1800);
+    
+    // Nettoyer les particules après l'animation
+    setTimeout(() => {
+      setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)));
+    }, 2500);
+  };
+
+  // Exposer la fonction pour les autres composants
+  useEffect(() => {
+    // Stocker la fonction dans window pour l'accès global
+    (window as any).triggerNutAnimation = triggerNutAnimation;
+  }, []);
   return (
     <div className="relative flex flex-col items-center p-6">
+      {/* Particules animées de glands */}
+      {particles.map((particle) => (
+        <div
+          key={particle.id}
+          className="absolute pointer-events-none z-30 text-2xl"
+          style={{
+            left: `${particle.x}px`,
+            top: `${particle.y}px`,
+            '--target-x': `${particle.deltaX}px`,
+            '--target-y': `${particle.deltaY}px`,
+            animationDelay: `${particle.delay}ms`,
+          } as React.CSSProperties}
+        >
+          <div className="animate-nut-to-counter">🌰</div>
+        </div>
+      ))}
+
       {/* Score badge */}
-      <div className="absolute top-4 right-4 bg-primary-500 text-white px-4 py-2 rounded-full text-lg font-bold shadow-lg z-20">
+      <div id="score-badge" className="absolute top-4 right-4 bg-primary-500 text-white px-4 py-2 rounded-full text-lg font-bold shadow-lg z-20">
         {score} 
         <span className="ml-1">🌰</span>
       </div>
