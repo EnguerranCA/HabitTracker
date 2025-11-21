@@ -34,7 +34,17 @@ async function getHabitsCalendarData(userId: string) {
     });
 
     // Organiser les données par date
-    const calendarData: { [key: string]: { completed: number; missed: number; total: number; } } = {};
+    const calendarData: { [key: string]: { 
+      completed: number; 
+      missed: number; 
+      total: number;
+      habits: Array<{
+        name: string;
+        emoji: string;
+        completed: boolean;
+        type: 'GOOD' | 'BAD';
+      }>;
+    } } = {};
     
     // Grouper par date
     const logsByDate = logs.reduce((acc, log) => {
