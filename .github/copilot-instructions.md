@@ -35,13 +35,13 @@
 
 ### US4. En tant qu'utilisateur, je veux voir mes habitudes sur un calendrier avec des pastilles pour visualiser mes progrès.
 **Critères d'acceptation :**
-- [ ] Un calendrier mensuel affiche tous les jours du mois
-- [ ] Chaque jour contient des pastilles colorées représentant les habitudes
-- [ ] Couleur verte pour les habitudes accomplies
-- [ ] Couleur rouge pour les habitudes manquées
-- [ ] Couleur grise pour les habitudes du jour
-- [ ] Au clic sur un jour, détail des habitudes de ce jour
-- [ ] Navigation entre les mois précédent/suivant
+- [x] Un calendrier mensuel affiche tous les jours du mois
+- [x] Chaque jour contient des pastilles colorées représentant les habitudes
+- [x] Couleur verte pour les habitudes accomplies
+- [x] Couleur rouge pour les habitudes manquées
+- [x] Couleur grise pour les habitudes du jour
+- [x] Au clic sur un jour, détail des habitudes de ce jour
+- [x] Navigation entre les mois précédent/suivant
 
 ### US5. En tant qu'utilisateur, je veux voir mes streaks (séries de jours réussis) pour rester motivé.
 **Critères d'acceptation :**
@@ -119,10 +119,10 @@
 
 ### US13. En tant qu'utilisateur, je veux un graphique pour visualiser ma productivité sur une période.
 **Critères d'acceptation :**
-- [ ] Graphique en barres par semaine/mois montrant le % de réussite
+- [x] Graphique en barres par semaine/mois montrant le % de réussite
 - [ ] Courbe d'évolution de l'XP dans le temps
 - [ ] Filtrage par habitude spécifique ou vue globale
-- [ ] Légende claire et tooltips informatifs
+- [x] Légende claire et tooltips informatifs
 - [ ] Export des données en CSV
 - [ ] Comparaison entre périodes (mois actuel vs précédent)
 

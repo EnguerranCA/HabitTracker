@@ -269,8 +269,9 @@ export async function createHabitFromDashboard(prevState: State, formData: FormD
 
 export async function toggleHabitCompletion(habitId: string, completed: boolean) {
   try {
+    // Créer une date UTC pour aujourd'hui sans problème de timezone
     const today = new Date();
-    const todayString = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+    const todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
     
     // Vérifier si l'habitude existe
     const habit = await prisma.habit.findUnique({
@@ -285,7 +286,7 @@ export async function toggleHabitCompletion(habitId: string, completed: boolean)
     const existingLog = await prisma.habitLog.findFirst({
       where: {
         habitId,
-        date: new Date(todayString),
+        date: todayUTC,
       },
     });
 
@@ -305,15 +306,16 @@ export async function toggleHabitCompletion(habitId: string, completed: boolean)
         data: {
           habitId,
           userId: habit.userId,
-          date: new Date(todayString),
+          date: todayUTC,
           completed,
           count: completed ? 1 : 0,
         },
       });
     }
 
-    // Revalider la page pour mettre à jour l'affichage
+    // Revalider les pages pour mettre à jour l'affichage
     revalidatePath('/dashboard');
+    revalidatePath('/dashboard/calendar');
     
     return { success: true };
   } catch (error) {

@@ -82,21 +82,142 @@ export function LatestInvoicesSkeleton() {
   );
 }
 
-export default function DashboardSkeleton() {
+// Skeleton pour les habitudes
+export function HabitCardSkeleton() {
+  return (
+    <div className={`${shimmer} relative overflow-hidden rounded-lg bg-gray-100 p-4 shadow-sm`}>
+      <div className="flex items-center space-x-3">
+        <div className="h-8 w-8 rounded-full bg-gray-200" />
+        <div className="flex-1">
+          <div className="h-5 w-24 rounded-md bg-gray-200 mb-1" />
+          <div className="h-3 w-16 rounded-md bg-gray-200" />
+        </div>
+        <div className="h-6 w-6 rounded bg-gray-200" />
+      </div>
+    </div>
+  );
+}
+
+export function HabitsListSkeleton() {
+  return (
+    <div className="space-y-4">
+      <HabitCardSkeleton />
+      <HabitCardSkeleton />
+      <HabitCardSkeleton />
+      <HabitCardSkeleton />
+    </div>
+  );
+}
+
+// Skeleton pour le hérisson
+export function HedgehogSkeleton() {
+  return (
+    <div className={`${shimmer} relative overflow-hidden rounded-lg bg-gray-100 p-6 text-center`}>
+      <div className="mb-4">
+        <div className="h-24 w-24 rounded-full bg-gray-200 mx-auto" />
+      </div>
+      <div className="h-5 w-20 rounded-md bg-gray-200 mx-auto mb-2" />
+      <div className="h-3 w-16 rounded-md bg-gray-200 mx-auto" />
+    </div>
+  );
+}
+
+// Skeleton pour les statistiques
+export function StatCardSkeleton() {
+  return (
+    <div className={`${shimmer} relative overflow-hidden rounded-lg bg-gray-100 p-4`}>
+      <div className="text-center">
+        <div className="h-8 w-12 rounded-md bg-gray-200 mx-auto mb-2" />
+        <div className="h-4 w-20 rounded-md bg-gray-200 mx-auto" />
+      </div>
+    </div>
+  );
+}
+
+export function StatsGridSkeleton() {
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+      <StatCardSkeleton />
+    </div>
+  );
+}
+
+// Skeleton pour le calendrier
+export function CalendarSkeleton() {
+  return (
+    <div className={`${shimmer} relative overflow-hidden rounded-lg bg-gray-100 p-6`}>
+      {/* En-tête du calendrier */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="h-6 w-6 rounded bg-gray-200" />
+        <div className="h-6 w-24 rounded-md bg-gray-200" />
+        <div className="h-6 w-6 rounded bg-gray-200" />
+      </div>
+      
+      {/* Jours de la semaine */}
+      <div className="grid grid-cols-7 gap-2 mb-4">
+        {Array.from({ length: 7 }, (_, i) => (
+          <div key={i} className="h-4 w-8 rounded-md bg-gray-200 mx-auto" />
+        ))}
+      </div>
+      
+      {/* Grille du calendrier */}
+      <div className="grid grid-cols-7 gap-2">
+        {Array.from({ length: 35 }, (_, i) => (
+          <div key={i} className="aspect-square rounded-md bg-gray-200 p-2">
+            <div className="h-4 w-4 rounded-full bg-gray-300 mx-auto" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Skeleton pour le graphique
+export function ChartSkeleton() {
+  return (
+    <div className={`${shimmer} relative overflow-hidden rounded-lg bg-gray-100 p-6`}>
+      <div className="mb-4">
+        <div className="h-6 w-32 rounded-md bg-gray-200 mb-2" />
+        <div className="h-4 w-48 rounded-md bg-gray-200" />
+      </div>
+      <div className="h-64 rounded-md bg-gray-200" />
+    </div>
+  );
+}
+
+export function DashboardSkeleton() {
   return (
     <>
-      <div
-        className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
-      />
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <CardSkeleton />
-        <CardSkeleton />
-        <CardSkeleton />
-        <CardSkeleton />
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-        <RevenueChartSkeleton />
-        <LatestInvoicesSkeleton />
+      {/* Titre principal */}
+      <div className={`${shimmer} relative mb-6 h-8 w-48 overflow-hidden rounded-md bg-gray-100`} />
+      
+      {/* Grille principale */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Colonne gauche */}
+        <div className="space-y-6">
+          {/* Hérisson */}
+          <HedgehogSkeleton />
+          
+          {/* Liste des habitudes */}
+          <div className="rounded-lg bg-white p-6 shadow-sm">
+            <div className={`${shimmer} relative mb-4 h-6 w-32 overflow-hidden rounded-md bg-gray-100`} />
+            <HabitsListSkeleton />
+          </div>
+        </div>
+        
+        {/* Colonne droite */}
+        <div className="space-y-6">
+          {/* Statistiques */}
+          <div className="rounded-lg bg-white p-6 shadow-sm">
+            <div className={`${shimmer} relative mb-4 h-6 w-24 overflow-hidden rounded-md bg-gray-100`} />
+            <StatsGridSkeleton />
+          </div>
+          
+          {/* Calendrier */}
+          <CalendarSkeleton />
+        </div>
       </div>
     </>
   );

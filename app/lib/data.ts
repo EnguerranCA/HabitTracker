@@ -92,8 +92,9 @@ export async function fetchUserHabits(userId?: string) {
       targetUserId = firstUser.id;
     }
 
+    // Créer une date UTC pour aujourd'hui sans problème de timezone
     const today = new Date();
-    const todayString = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+    const todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
 
     const habits = await prisma.habit.findMany({
       where: {
@@ -103,7 +104,7 @@ export async function fetchUserHabits(userId?: string) {
       include: {
         logs: {
           where: {
-            date: new Date(todayString),
+            date: todayUTC,
           },
           take: 1,
         },
@@ -128,13 +129,14 @@ export async function fetchUserHabits(userId?: string) {
 
 export async function fetchHabitLogsForToday(habitId: string) {
   try {
+    // Créer une date UTC pour aujourd'hui sans problème de timezone
     const today = new Date();
-    const todayString = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
+    const todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
 
     const log = await prisma.habitLog.findFirst({
       where: {
         habitId,
-        date: new Date(todayString),
+        date: todayUTC,
       },
     });
 
