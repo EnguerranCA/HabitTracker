@@ -459,3 +459,105 @@ export async function deleteHabit(id: string) {
     throw new Error('Erreur de base de données : Impossible de supprimer l\'habitude.');
   }
 }
+
+// ========== ACTIONS PROFIL UTILISATEUR ==========
+
+const UpdateProfileSchema = z.object({
+  userId: z.string(),
+  name: z.string().min(1, 'Le nom est requis'),
+});
+
+const ChangePasswordSchema = z.object({
+  userId: z.string(),
+  currentPassword: z.string().min(1, 'Le mot de passe actuel est requis'),
+  newPassword: z.string().min(6, 'Le nouveau mot de passe doit contenir au moins 6 caractères'),
+  confirmPassword: z.string().min(6, 'La confirmation est requise'),
+});
+
+export async function updateProfile(prevState: any, formData: FormData) {
+  try {
+    const validatedData = UpdateProfileSchema.parse({
+      userId: formData.get('userId'),
+      name: formData.get('name'),
+    });
+
+    // Vérifier que l'utilisateur existe
+    const currentUser = await prisma.user.findUnique({
+      where: { id: validatedData.userId }
+    });
+
+    if (!currentUser) {
+      return { message: 'Utilisateur non trouvé.' };
+    }
+
+    // Mettre à jour seulement le nom
+    await prisma.user.update({
+      where: { id: validatedData.userId },
+      data: {
+        name: validatedData.name,
+      },
+    });
+
+    revalidatePath('/dashboard/profile');
+    return { message: 'Profil mis à jour avec succès !' };
+
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return { message: 'Données invalides. Veuillez vérifier vos informations.' };
+    }
+    console.error('Error updating profile:', error);
+    return { message: 'Erreur lors de la mise à jour du profil.' };
+  }
+}
+
+export async function changePassword(prevState: any, formData: FormData) {
+  try {
+    const validatedData = ChangePasswordSchema.parse({
+      userId: formData.get('userId'),
+      currentPassword: formData.get('currentPassword'),
+      newPassword: formData.get('newPassword'),
+      confirmPassword: formData.get('confirmPassword'),
+    });
+
+    // Vérifier que les nouveaux mots de passe concordent
+    if (validatedData.newPassword !== validatedData.confirmPassword) {
+      return { message: 'Les nouveaux mots de passe ne correspondent pas.' };
+    }
+
+    // Récupérer l'utilisateur avec son mot de passe
+    const user = await prisma.user.findUnique({
+      where: { id: validatedData.userId }
+    });
+
+    if (!user) {
+      return { message: 'Utilisateur non trouvé.' };
+    }
+
+    // Vérifier le mot de passe actuel
+    const isValidPassword = await bcrypt.compare(validatedData.currentPassword, user.password);
+    if (!isValidPassword) {
+      return { message: 'Le mot de passe actuel est incorrect.' };
+    }
+
+    // Hasher le nouveau mot de passe
+    const hashedNewPassword = await bcrypt.hash(validatedData.newPassword, 10);
+
+    // Mettre à jour le mot de passe
+    await prisma.user.update({
+      where: { id: validatedData.userId },
+      data: {
+        password: hashedNewPassword,
+      },
+    });
+
+    revalidatePath('/dashboard/profile');
+    return { message: 'Mot de passe changé avec succès !' };
+
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return { message: 'Données invalides. Veuillez vérifier vos informations.' };
+    }
+    console.error('Error changing password:', error);
+    return { message: 'Erreur lors du changement de mot de passe.' };
+  }
+}

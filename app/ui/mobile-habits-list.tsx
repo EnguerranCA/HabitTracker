@@ -134,8 +134,8 @@ export default function MobileHabitsList({ initialHabits }: MobileHabitsListProp
           key={habit.id}
           className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
             habit.type === 'GOOD' 
-              ? 'bg-blue-400 text-white' 
-              : 'bg-purple-400 text-white'
+              ? 'bg-habit-good text-white' 
+              : 'bg-habit-bad text-white'
           }`}
         >
           <div className="flex items-center gap-3 flex-1">
@@ -171,7 +171,7 @@ export default function MobileHabitsList({ initialHabits }: MobileHabitsListProp
       ))}
       
       {/* Bouton d'ajout d'habitude */}
-      <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-10">
+      <div className="fixed bottom-25 left-1/2 transform -translate-x-1/2 z-10 w-60">
         <button
           onClick={handleCreateHabit}
           className="bg-primary-500 text-white px-6 py-3 rounded-full shadow-lg hover:bg-primary-600 transition-colors flex items-center gap-2"

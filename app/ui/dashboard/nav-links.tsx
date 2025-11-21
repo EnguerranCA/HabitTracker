@@ -16,7 +16,7 @@ import clsx from 'clsx';
 const links = [
   { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
   { name: 'Mes Habitudes', href: '/dashboard/habits', icon: CalendarDaysIcon },
-  { name: 'Statistiques', href: '/dashboard/stats', icon: ChartBarIcon },
+  { name: 'Calendrier', href: '/dashboard/calendar', icon: ChartBarIcon },
   { name: 'Mon Hérisson', href: '/dashboard/hedgehog', icon: SparklesIcon },
   { name: 'Focus Sessions', href: '/dashboard/focus', icon: ClockIcon },
   { name: 'Profil', href: '/dashboard/profile', icon: UserIcon },

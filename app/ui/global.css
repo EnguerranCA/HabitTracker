@@ -16,6 +16,8 @@
   --color-primary-900: #78350f;  /* Orange 900 */
   --color-primary-950: #451a03;  /* Orange 950 */
 
+  
+
   /* Semantic Colors */
   --color-background: #ffffff;           /* White */
   --color-background-secondary: #f9fafb; /* Gray 50 */
@@ -30,6 +32,11 @@
   --color-border: #e5e7eb;               /* Gray 200 */
   --color-border-secondary: #d1d5db;     /* Gray 300 */
   --color-border-accent: #fde68a;        /* Orange 200 */
+
+  --color-habit-good: #3b9dff;        /* Blue 500 */
+  
+  --color-habit-bad: #ff4a5d;         /* Purple 500 */
+
 
   /* Status Colors */
   --color-success: #22c55e;      /* Green 500 */
@@ -50,7 +57,7 @@
   --color-blue-600: #2F6FEB;
 }
 
-@tailwind base;
+/* @tailwind base; */
 
 @layer base {
   /* Dark mode variables */

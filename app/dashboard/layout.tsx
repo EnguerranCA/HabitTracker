@@ -4,10 +4,10 @@ export const experimental_ppr = true;
  
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-primary-50">
+    <div className="h-screen bg-primary-50 flex flex-col">
       {/* Mobile-first layout */}
-      <div className="max-w-sm mx-auto min-h-screen relative">
-        <div className="p-4">
+      <div className="max-w-sm mx-auto h-full flex flex-col relative">
+        <div className="flex-1 overflow-hidden">
           {children}
         </div>
         <MobileNavigation />
