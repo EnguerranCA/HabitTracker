@@ -62,7 +62,7 @@
 ### US7. En tant que développeur, je veux un mode debug pour avancer artificiellement le jour et tester le comportement temporel.
 **Critères d'acceptation :**
 - [ ] Variable d'environnement DEBUG_MODE active le mode développeur
-- [ ] Interface admin permet de modifier la date système
+- [ ] C'est un menu flottant opur changer le jour
 - [ ] Boutons "+1 jour", "+1 semaine" pour avancer le temps
 - [ ] Toute la logique temporelle utilise cette date simulée
 - [ ] Possibilité de reset à la date réelle

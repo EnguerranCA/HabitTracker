@@ -3,6 +3,7 @@
 import { HomeIcon, CalendarIcon, UserIcon } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import DebugDateButton from './debug-date-button';
 
 export default function MobileNavigation() {
   const pathname = usePathname();
@@ -39,6 +40,9 @@ export default function MobileNavigation() {
           <UserIcon className="w-6 h-6" />
           <span className="text-xs font-medium">Profil</span>
         </Link>
+        
+        {/* Bouton debug date - visible uniquement en développement */}
+        <DebugDateButton />
       </div>
     </div>
   );

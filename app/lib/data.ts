@@ -4,6 +4,7 @@ import {
   UsersTable,
   UserForm,
 } from "./definitions";
+import { getCurrentDateServer, createUTCDate } from "./debug-date-server";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
@@ -92,9 +93,9 @@ export async function fetchUserHabits(userId?: string) {
       targetUserId = firstUser.id;
     }
 
-    // Créer une date UTC pour aujourd'hui sans problème de timezone
-    const today = new Date();
-    const todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+    // Créer une date UTC pour aujourd'hui (avec support debug)
+    const today = getCurrentDateServer();
+    const todayUTC = createUTCDate(today);
 
     // Requête optimisée avec limit
     const habits = await prisma.habit.findMany({
