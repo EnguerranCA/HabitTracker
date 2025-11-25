@@ -124,7 +124,9 @@ export default function Hedgehog({ score }: HedgehogProps) {
         </div>
         
         {/* Hérisson au centre */}
-        <img
+        <Image
+        width={150}
+        height={150}
           src="/herisson-flat.png"
           alt="Hérisson"
           className="w-64 h-64 object-contain absolute bottom-0 left-1/2 transform -translate-x-1/2 drop-shadow-lg"
