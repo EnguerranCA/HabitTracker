@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition, useEffect } from 'react';
 import { CheckIcon, XMarkIcon, PlusIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import { toggleHabitCompletion, createHabitFromDashboard, updateHabitFromDashboard } from '@/app/lib/actions';
+import { toggleHabitCompletion, createHabitFromDashboard, updateHabitFromDashboard, deleteHabit } from '@/app/lib/actions';
 import { useActionState } from 'react';
 
 interface HabitWithCompletion {
@@ -36,6 +36,7 @@ export default function MobileHabitsList({ initialHabits }: MobileHabitsListProp
   const [editingHabit, setEditingHabit] = useState<HabitWithCompletion | null>(null);
   const [habitType, setHabitType] = useState('good');
   const [habitFrequency, setHabitFrequency] = useState('daily');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   const initialState = { message: '', errors: {} };
   const [createState, createAction] = useActionState(createHabitFromDashboard, initialState);
@@ -84,15 +85,6 @@ export default function MobileHabitsList({ initialHabits }: MobileHabitsListProp
     });
   };
 
-  if (habits.length === 0) {
-    return (
-      <div className="text-center py-8 text-foreground-secondary">
-        <span className="text-4xl mb-2 block">🦔</span>
-        <p>Aucune habitude créée</p>
-      </div>
-    );
-  }
-
   // Ouvrir la modale d'édition
   const handleEditHabit = (habit: HabitWithCompletion) => {
     setEditingHabit(habit);
@@ -113,6 +105,29 @@ export default function MobileHabitsList({ initialHabits }: MobileHabitsListProp
     setShowModal(true);
   };
 
+  // Fonction de suppression d'habitude
+  const handleDeleteHabit = () => {
+    if (!editingHabit) return;
+    
+    startTransition(async () => {
+      try {
+        const result = await deleteHabit(editingHabit.id);
+        console.log('Résultat suppression:', result);
+        
+        // Supprimer l'habitude de la liste locale
+        setHabits(prev => prev.filter(h => h.id !== editingHabit.id));
+        // Fermer les modales
+        setShowModal(false);
+        setShowDeleteConfirm(false);
+        setEditingHabit(null);
+      } catch (error) {
+        console.error('Erreur détaillée lors de la suppression:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
+        alert(`Erreur lors de la suppression: ${errorMessage}`);
+      }
+    });
+  };
+
   // Gérer la soumission du formulaire et fermer le modal en cas de succès
   useEffect(() => {
     if (createState.message === 'success' || updateState.message === 'success') {
@@ -129,46 +144,53 @@ export default function MobileHabitsList({ initialHabits }: MobileHabitsListProp
 
   return (
     <div className="space-y-3 pb-32"> {/* pb-32 pour éviter la navigation mobile et le bouton notes */}
-      {habits.map((habit) => (
-        <div
-          key={habit.id}
-          className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
-            habit.type === 'GOOD' 
-              ? 'bg-habit-good text-white' 
-              : 'bg-habit-bad text-white'
-          }`}
-        >
-          <div className="flex items-center gap-3 flex-1">
-            <span className="text-2xl">{habit.emoji}</span>
-            <span className="font-medium text-white">{habit.name}</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            {/* Bouton de menu */}
-            <button
-              onClick={() => handleEditHabit(habit)}
-              className="p-1 hover:bg-white/20 rounded-full transition-colors"
-            >
-              <EllipsisVerticalIcon className="w-5 h-5 text-white" />
-            </button>
-            
-            {/* Bouton de toggle */}
-            <button
-              onClick={(e) => handleToggle(habit.id, e)}
-              disabled={isPending}
-              className={`w-8 h-8 rounded-lg border-2 border-white flex items-center justify-center transition-all ${
-                habit.isCompletedToday
-                  ? 'bg-white text-blue-500'
-                  : 'bg-transparent'
-              } ${isPending ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-            >
-              {habit.isCompletedToday && (
-                <CheckIcon className="w-5 h-5" />
-              )}
-            </button>
-          </div>
+      {habits.length === 0 ? (
+        <div className="text-center py-8 text-foreground-secondary">
+          <span className="text-4xl mb-2 block">🦔</span>
+          <p>Aucune habitude créée</p>
         </div>
-      ))}
+      ) : (
+        habits.map((habit) => (
+          <div
+            key={habit.id}
+            className={`flex items-center justify-between p-4 rounded-2xl transition-all ${
+              habit.type === 'GOOD' 
+                ? 'bg-habit-good text-white' 
+                : 'bg-habit-bad text-white'
+            }`}
+          >
+            <div className="flex items-center gap-3 flex-1">
+              <span className="text-2xl">{habit.emoji}</span>
+              <span className="font-medium text-white">{habit.name}</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              {/* Bouton de menu */}
+              <button
+                onClick={() => handleEditHabit(habit)}
+                className="p-1 hover:bg-white/20 rounded-full transition-colors"
+              >
+                <EllipsisVerticalIcon className="w-5 h-5 text-white" />
+              </button>
+              
+              {/* Bouton de toggle */}
+              <button
+                onClick={(e) => handleToggle(habit.id, e)}
+                disabled={isPending}
+                className={`w-8 h-8 rounded-lg border-2 border-white flex items-center justify-center transition-all ${
+                  habit.isCompletedToday
+                    ? 'bg-white text-blue-500'
+                    : 'bg-transparent'
+                } ${isPending ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+              >
+                {habit.isCompletedToday && (
+                  <CheckIcon className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+          </div>
+        ))
+      )}
       
       {/* Bouton d'ajout d'habitude */}
       <div className="fixed bottom-25 left-1/2 transform -translate-x-1/2 z-10 w-60">
@@ -329,6 +351,18 @@ export default function MobileHabitsList({ initialHabits }: MobileHabitsListProp
                   >
                     Annuler
                   </button>
+                  
+                  {/* Bouton supprimer (seulement en mode édition) */}
+                  {editingHabit && (
+                    <button
+                      type="button"
+                      onClick={() => setShowDeleteConfirm(true)}
+                      className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                    >
+                      Supprimer
+                    </button>
+                  )}
+                  
                   <button
                     type="submit"
                     disabled={!habitName.trim()}
@@ -338,6 +372,41 @@ export default function MobileHabitsList({ initialHabits }: MobileHabitsListProp
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de confirmation de suppression */}
+      {showDeleteConfirm && editingHabit && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg w-full max-w-sm">
+            <div className="p-6">
+              <div className="text-center">
+                <div className="text-4xl mb-4">⚠️</div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Supprimer l'habitude ?
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Êtes-vous sûr de vouloir supprimer "<strong>{editingHabit.name}</strong>" ? 
+                  Cette action ne peut pas être annulée.
+                </p>
+              </div>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleDeleteHabit}
+                  className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  Supprimer
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -189,37 +189,19 @@ export function ChartSkeleton() {
 
 export function DashboardSkeleton() {
   return (
-    <>
-      {/* Titre principal */}
-      <div className={`${shimmer} relative mb-6 h-8 w-48 overflow-hidden rounded-md bg-gray-100`} />
+    <main className="h-full w-full flex flex-col">
+      {/* Hérisson fixe en haut */}
+      <div className="shrink-0 bg-primary-100 border-b border-gray-100 px-4 py-2">
+        <HedgehogSkeleton />
+      </div>
       
-      {/* Grille principale */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* Colonne gauche */}
-        <div className="space-y-6">
-          {/* Hérisson */}
-          <HedgehogSkeleton />
-          
-          {/* Liste des habitudes */}
-          <div className="rounded-lg bg-white p-6 shadow-sm">
-            <div className={`${shimmer} relative mb-4 h-6 w-32 overflow-hidden rounded-md bg-gray-100`} />
-            <HabitsListSkeleton />
-          </div>
-        </div>
-        
-        {/* Colonne droite */}
-        <div className="space-y-6">
-          {/* Statistiques */}
-          <div className="rounded-lg bg-white p-6 shadow-sm">
-            <div className={`${shimmer} relative mb-4 h-6 w-24 overflow-hidden rounded-md bg-gray-100`} />
-            <StatsGridSkeleton />
-          </div>
-          
-          {/* Calendrier */}
-          <CalendarSkeleton />
+      {/* Zone scrollable pour les habitudes */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-4">
+          <HabitsListSkeleton />
         </div>
       </div>
-    </>
+    </main>
   );
 }
 

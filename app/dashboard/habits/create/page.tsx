@@ -1,6 +1,7 @@
 import Form from '@/app/ui/habits/create-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { josefinSans } from '@/app/ui/fonts';
+import Image from 'next/image';
 
 export default async function Page() {
   return (
@@ -24,8 +25,9 @@ export default async function Page() {
               <h2 className={`${josefinSans.className} text-xl font-semibold text-foreground`}>
                 Créer une nouvelle habitude
               </h2>
-              <p className="text-sm text-foreground-secondary">
-                Ajoutez une habitude à votre routine quotidienne pour faire grandir votre hérisson ! 🌰
+              <p className="text-sm text-foreground-secondary flex items-center gap-1">
+                Ajoutez une habitude à votre routine quotidienne pour faire grandir votre hérisson ! 
+                <Image src="/gland.webp" alt="Gland" width={16} height={16} className="inline-block" />
               </p>
             </div>
           </div>

@@ -70,26 +70,20 @@ export default function HabitCalendar({ habitsData = {} }: HabitCalendarProps) {
     return days;
   };
 
-  // Obtenir les pastilles pour un jour donné
-  const getPastilles = (day: number) => {
+  // Obtenir le taux de réussite pour un jour donné
+  const getCompletionRate = (day: number) => {
     const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const dayData = habitsData[dateKey];
     
-    if (!dayData) return [];
+    if (!dayData || dayData.total === 0) return null;
 
-    const pastilles = [];
-    
-    // Pastilles vertes pour habitudes accomplies
-    for (let i = 0; i < dayData.completed; i++) {
-      pastilles.push('bg-green-500');
-    }
-    
-    // Pastilles rouges pour habitudes manquées
-    for (let i = 0; i < dayData.missed; i++) {
-      pastilles.push('bg-red-500');
-    }
-
-    return pastilles.slice(0, 4); // Limite à 4 pastilles max par jour
+    const rate = Math.round((dayData.completed / dayData.total) * 100);
+    return {
+      percentage: rate,
+      completed: dayData.completed,
+      total: dayData.total,
+      isEmpty: false
+    };
   };
 
   // Vérifier si c'est aujourd'hui
@@ -153,7 +147,7 @@ export default function HabitCalendar({ habitsData = {} }: HabitCalendarProps) {
             onClick={day ? () => handleDayClick(day) : undefined}
           >
             {day && (
-              <div className="h-full flex flex-col items-center justify-between">
+              <div className="h-full flex flex-col items-center justify-between p-1">
                 {/* Numéro du jour */}
                 <span className={`text-sm font-medium ${
                   isToday(day) 
@@ -163,15 +157,33 @@ export default function HabitCalendar({ habitsData = {} }: HabitCalendarProps) {
                   {day}
                 </span>
                 
-                {/* Pastilles d'habitudes */}
-                <div className="flex gap-0.5 flex-wrap justify-center">
-                  {getPastilles(day).map((color, pastilleIndex) => (
-                    <div
-                      key={pastilleIndex}
-                      className={`w-1.5 h-1.5 rounded-full ${color}`}
-                    />
-                  ))}
-                </div>
+                {/* Jauge de progression */}
+                {(() => {
+                  const completionData = getCompletionRate(day);
+                  if (!completionData) return null;
+                  
+                  return (
+                    <div className="w-full mt-1">
+                      {/* Barre de progression */}
+                      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full transition-all duration-300 ${
+                            completionData.percentage === 100 
+                              ? 'bg-green-500' 
+                              : completionData.percentage >= 75 
+                              ? 'bg-lime-500'
+                              : completionData.percentage >= 50 
+                              ? 'bg-yellow-500'
+                              : completionData.percentage >= 25
+                              ? 'bg-orange-500'
+                              : 'bg-red-400'
+                          }`}
+                          style={{ width: `${completionData.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             )}
           </div>
@@ -179,18 +191,26 @@ export default function HabitCalendar({ habitsData = {} }: HabitCalendarProps) {
       </div>
 
       {/* Légende */}
-      <div className="flex items-center justify-center gap-4 mt-4 text-xs text-gray-600">
+      <div className="flex items-center justify-center gap-3 mt-4 text-xs text-gray-600">
         <div className="flex items-center gap-1">
-          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-          <span>Réalisé</span>
+          <div className="w-3 h-2 rounded-full bg-green-500"></div>
+          <span>100%</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-2 h-2 rounded-full bg-red-500"></div>
-          <span>Manqué</span>
+          <div className="w-3 h-2 rounded-full bg-lime-500"></div>
+          <span>75%+</span>
         </div>
         <div className="flex items-center gap-1">
-          <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-          <span>À venir</span>
+          <div className="w-3 h-2 rounded-full bg-yellow-500"></div>
+          <span>50%+</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="w-3 h-2 rounded-full bg-orange-500"></div>
+          <span>25%+</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="w-3 h-2 rounded-full bg-red-400"></div>
+          <span>&lt;25%</span>
         </div>
       </div>
 

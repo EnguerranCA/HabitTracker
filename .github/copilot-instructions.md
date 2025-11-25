@@ -5,33 +5,33 @@
 
 ### US1. En tant qu'utilisateur, je veux créer un compte et me connecter pour accéder à mes habitudes.
 **Critères d'acceptation :**
-- [ ] Un formulaire d'inscription permet de créer un compte avec email/mot de passe
-- [ ] Un formulaire de connexion permet de s'authentifier
-- [ ] Les mots de passe sont hashés et stockés de manière sécurisée
-- [ ] Une session est maintenue après connexion
-- [ ] Un message d'erreur s'affiche en cas d'identifiants incorrects
-- [ ] L'utilisateur est redirigé vers son dashboard après connexion réussie
+- [x] Un formulaire d'inscription permet de créer un compte avec email/mot de passe
+- [x] Un formulaire de connexion permet de s'authentifier
+- [x] Les mots de passe sont hashés et stockés de manière sécurisée
+- [x] Une session est maintenue après connexion
+- [x] Un message d'erreur s'affiche en cas d'identifiants incorrects
+- [x] L'utilisateur est redirigé vers son dashboard après connexion réussie
 
 ### US2. En tant qu'utilisateur, je veux créer une habitude avec un emoji, un nom, une fréquence (quotidienne/hebdomadaire) et un type (bonne/mauvaise) pour personnaliser mes routines.
 **Critères d'acceptation :**
-- [ ] Un formulaire permet de saisir le nom de l'habitude (max 50 caractères)
-- [ ] Un sélecteur d'emoji permet de choisir parmi une liste prédéfinie
-- [ ] Un bouton radio permet de choisir entre "quotidienne" et "hebdomadaire"
-- [ ] Un bouton radio permet de choisir entre "bonne habitude" et "mauvaise habitude"
-- [ ] L'habitude est sauvegardée en base avec tous les champs requis
-- [ ] Un message de confirmation s'affiche après création (toast)
-- [ ] La validation côté client empêche la soumission de champs vides
+- [x] Un formulaire permet de saisir le nom de l'habitude (max 50 caractères)
+- [x] Un sélecteur d'emoji permet de choisir parmi une liste prédéfinie
+- [x] Un bouton radio permet de choisir entre "quotidienne" et "hebdomadaire"
+- [x] Un bouton radio permet de choisir entre "bonne habitude" et "mauvaise habitude"
+- [x] L'habitude est sauvegardée en base avec tous les champs requis
+- [x] Un message de confirmation s'affiche après création (toast)
+- [x] La validation côté client empêche la soumission de champs vides
 
 ### US3. En tant qu'utilisateur, je veux cocher mes habitudes chaque jour/semaine pour suivre ma progression.
 **Critères d'acceptation :**
-- [ ] Une liste des habitudes du jour/semaine s'affiche sur le dashboard
-- [ ] Chaque habitude a une case à cocher cliquable
-- [ ] Le clic sur une case marque l'habitude comme accomplie pour la période
-- [ ] L'état "coché" est stocké en base de données
-- [ ] L'interface se met à jour immédiatement après le clic
-- [ ] Les habitudes déjà cochées restent cochées au rechargement de la page
-- [ ] Un indicateur visuel distingue les habitudes accomplies des non-accomplies
-- [ ] Chaque complétion de l'habitude est stockée en base de données
+- [x] Une liste des habitudes du jour/semaine s'affiche sur le dashboard
+- [x] Chaque habitude a une case à cocher cliquable
+- [x] Le clic sur une case marque l'habitude comme accomplie pour la période
+- [x] L'état "coché" est stocké en base de données
+- [x] L'interface se met à jour immédiatement après le clic
+- [x] Les habitudes déjà cochées restent cochées au rechargement de la page
+- [x] Un indicateur visuel distingue les habitudes accomplies des non-accomplies
+- [x] Chaque complétion de l'habitude est stockée en base de données
 
 ### US4. En tant qu'utilisateur, je veux voir mes habitudes sur un calendrier avec des pastilles pour visualiser mes progrès.
 **Critères d'acceptation :**
@@ -92,8 +92,8 @@
 
 ### US10. En tant qu'utilisateur, je veux nourrir mon hérisson quand je réussis mes tâches pour renforcer la sensation de récompense.
 **Critères d'acceptation :**
-- [ ] Bouton "Nourrir" apparaît après chaque habitude accomplie
-- [ ] Animation de nourriture tombant vers le hérisson
+- [x] Bouton "Nourrir" apparaît après chaque habitude accomplie
+- [x] Animation de nourriture tombant vers le hérisson
 - [ ] Jauge de bonheur/satiété du hérisson
 - [ ] Différents types de nourriture selon le type d'habitude
 - [ ] Le hérisson réagit visuellement (expressions, mouvements)
@@ -225,7 +225,39 @@ Les types TypeScript des données sont définis dans `app/lib/definitions.ts`.
 Les requêtes SQL sont réalisées dans `app/lib/data.ts`.
 Les actions serveur (CRUD utilisateurs, authentification) sont dans `app/lib/actions.ts`.
 
-### Tables à ajouter pour le MVP Habit Tracker
-- **habits** : Table des habitudes (id, user_id, name, emoji, type, iterations, creation_date)
-- **habit_logs** : Historique des réalisations (id, habit_id, date, completed)
-- **user_progress** : Progression utilisateur (id, user_id, level, xp, hedgehog_state)
+### Tables implémentées pour le MVP Habit Tracker
+- ✅ **habits** : Table des habitudes (id, user_id, name, emoji, type, frequency, creation_date, isActive)
+- ✅ **habit_logs** : Historique des réalisations (id, habit_id, user_id, date, completed)
+- ⏳ **user_progress** : Progression utilisateur (id, user_id, level, xp, hedgehog_state)
+
+---
+
+## 🎯 **Récapitulatif des fonctionnalités implémentées**
+
+### ✅ **PHASE 1 - MVP COMPLET** 
+- **Authentification** : NextAuth avec hash bcrypt, sessions, redirections
+- **Gestion des habitudes** : CRUD complet, formulaires, validation Zod
+- **Dashboard interactif** : Liste mobile, toggle optimiste, modales de création/édition
+- **Calendrier avancé** : Visualisation mensuelle, barres de progression, détails par jour
+- **Base de données** : Prisma + PostgreSQL avec relations et soft delete
+- **Navigation** : Interface responsive, liens actifs, breadcrumbs
+- **Profil utilisateur** : Modification nom/mot de passe, style enfantin
+
+### ✅ **PHASE 2 - GAMIFICATION (PARTIEL)**
+- **Hérisson interactif** : Affichage avec score dynamique, environnement 3D
+- **Animation des glands** : Trajectoire fluide et linéaire vers le compteur
+- **Bouton nourrir** : Interaction avec animation des particules
+- **Graphiques** : Tracking des performances avec barres de progression
+- **Images optimisées** : Composant Next.js Image pour gland.webp
+
+### ⏳ **EN COURS DE DÉVELOPPEMENT**
+- Système XP et niveaux
+- Streaks et statistiques détaillées
+- Éléments de décor déblocables
+- Mode debug temporel
+
+### 📱 **Interface utilisateur**
+- **Design** : Style enfantin avec couleurs primaires, formes arrondies
+- **Responsive** : Navigation mobile avec sidenav adaptative
+- **Animations** : Transitions fluides, feedback visuel immédiat
+- **Accessibilité** : Images avec alt, focus clavier, contraste élevé

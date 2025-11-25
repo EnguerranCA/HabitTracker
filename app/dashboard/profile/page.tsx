@@ -42,32 +42,16 @@ export default async function ProfilePage() {
     <main className="max-w-2xl mx-auto py-8">
       <div className="space-y-8">
         {/* En-tête simple */}
-        <div className="text-center">
-          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-2xl">🦔</span>
+        <div className="text-center mb-8">
+          <div className="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">🦔</span>
           </div>
-          <h1 className="text-2xl font-semibold text-gray-900">{user.name}</h1>
-          <p className="text-gray-500 text-sm">{user.email}</p>
-        </div>
-
-        {/* Stats rapides */}
-        <div className="grid grid-cols-3 gap-4 text-center">
-          <div className="py-4">
-            <div className="text-2xl font-bold text-gray-900">12</div>
-            <div className="text-xs text-gray-500">Habitudes</div>
-          </div>
-          <div className="py-4">
-            <div className="text-2xl font-bold text-blue-600">7</div>
-            <div className="text-xs text-gray-500">Streak</div>
-          </div>
-          <div className="py-4">
-            <div className="text-2xl font-bold text-green-600">89%</div>
-            <div className="text-xs text-gray-500">Réussite</div>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Salut {user.name} !</h1>
+          <p className="text-gray-500 text-base">{user.email}</p>
         </div>
 
         {/* Formulaire épuré */}
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
+        <div className="bg-white rounded-3xl p-8">
           <ProfileForm user={user} />
         </div>
       </div>

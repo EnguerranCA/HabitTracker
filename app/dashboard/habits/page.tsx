@@ -11,7 +11,7 @@ export default function Page() {
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
         <h1 className={`${josefinSans.className} text-2xl text-foreground`}>
-          Mes Habitudes 🌰
+          Mes Habitudes
         </h1>
       </div>
       

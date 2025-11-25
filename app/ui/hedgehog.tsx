@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface Particle {
   id: number;
@@ -90,18 +91,22 @@ export default function Hedgehog({ score }: HedgehogProps) {
             animationDelay: `${particle.delay}ms`,
           } as React.CSSProperties}
         >
-          <div className="animate-nut-to-counter">🌰</div>
+          <div className="animate-nut-to-counter">
+            <Image src="/gland.webp" alt="Gland" width={20} height={20} className="inline-block" />
+          </div>
         </div>
       ))}
 
       {/* Score badge */}
       <div id="score-badge" className="absolute top-4 right-4 bg-primary-500 text-white px-4 py-2 rounded-full text-lg font-bold shadow-lg z-20">
         {score} 
-        <span className="ml-1">🌰</span>
+        <span className="ml-1">
+          <Image src="/gland.webp" alt="Gland" width={20} height={20} className="inline-block" />
+        </span>
       </div>
       
       {/* Environnement du hérisson */}
-      <div className="w-full max-w-sm aspect-square bg-blue-300 rounded-3xl relative overflow-hidden shadow-lg">
+      <div className="w-full max-w-sm min-w-[20rem] min-h-[20rem] bg-blue-300 rounded-3xl relative overflow-hidden shadow-lg">
         {/* Montagnes en arrière-plan */}
         <div className="absolute bottom-0 w-full">
           {/* Montagnes */}
@@ -132,7 +137,7 @@ export default function Hedgehog({ score }: HedgehogProps) {
         onClick={handleFeed}
         className="mt-6 bg-primary-500 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-primary-600 transition-colors flex items-center gap-2"
       >
-        <span>🌰</span>
+        <Image src="/gland.webp" alt="Gland" width={25} height={25} className="inline-block" />
         Nourrir
       </button>
     </div>

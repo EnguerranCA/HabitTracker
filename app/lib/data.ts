@@ -96,6 +96,7 @@ export async function fetchUserHabits(userId?: string) {
     const today = new Date();
     const todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
 
+    // Requête optimisée avec limit
     const habits = await prisma.habit.findMany({
       where: {
         userId: targetUserId,
@@ -107,11 +108,15 @@ export async function fetchUserHabits(userId?: string) {
             date: todayUTC,
           },
           take: 1,
+          select: {
+            completed: true,
+          },
         },
       },
       orderBy: {
         createdAt: 'desc',
       },
+      take: 20, // Limiter à 20 habitudes max
     });
 
     // Enrichir les habitudes avec l'information de complétion du jour

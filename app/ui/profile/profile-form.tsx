@@ -58,9 +58,9 @@ export default function ProfileForm({ user }: ProfileFormProps) {
             </div>
             <button
               onClick={() => setIsEditing(true)}
-              className="text-sm text-primary-600 hover:text-primary-700 cursor-pointer"
+              className="px-4 py-2 bg-primary-500 text-white text-sm rounded-full hover:bg-primary-600 transition-colors shadow-md"
             >
-              Modifier
+              ✏️ Modifier
             </button>
           </div>
         ) : (
@@ -73,7 +73,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                 type="text"
                 name="name"
                 defaultValue={user.name}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50 rounded-2xl focus:outline-none focus:bg-primary-50 transition-colors"
                 required
               />
             </div>
@@ -84,7 +84,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                 type="email"
                 name="email"
                 defaultValue={user.email}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none cursor-not-allowed"
+                className="w-full px-4 py-3 bg-gray-100 rounded-2xl focus:outline-none cursor-not-allowed transition-colors"
                 disabled
                 required
               />
@@ -101,19 +101,19 @@ export default function ProfileForm({ user }: ProfileFormProps) {
               </div>
             )}
             
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <button
                 type="submit"
-                className="px-4 py-2 bg-primary-500 text-white text-sm rounded-lg hover:bg-primary-600 cursor-pointer"
+                className="px-6 py-3 bg-primary-500 text-white text-sm rounded-full hover:bg-primary-600 transition-colors shadow-lg flex-1"
               >
-                Sauvegarder
+                💾 Sauvegarder
               </button>
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="px-4 py-2 text-gray-600 text-sm hover:text-gray-800 cursor-pointer"
+                className="px-6 py-3 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition-colors shadow-md"
               >
-                Annuler
+                ❌ Annuler
               </button>
             </div>
           </form>
@@ -127,9 +127,9 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         {!showPasswordForm ? (
           <button
             onClick={() => setShowPasswordForm(true)}
-            className="text-sm text-blue-600 hover:text-blue-700 cursor-pointer"
+            className="px-4 py-2 bg-primary-500 text-white text-sm rounded-full hover:bg-primary-600 transition-colors shadow-md"
           >
-            Changer le mot de passe
+            🔐 Changer le mot de passe
           </button>
         ) : (
           <form action={passwordAction} className="space-y-4">
@@ -140,7 +140,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
               <input
                 type="password"
                 name="currentPassword"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50 rounded-2xl focus:outline-none focus:bg-primary-50 transition-colors"
                 required
               />
             </div>
@@ -150,7 +150,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
               <input
                 type="password"
                 name="newPassword"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50 rounded-2xl focus:outline-none focus:bg-primary-50 transition-colors"
                 required
               />
             </div>
@@ -160,7 +160,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
               <input
                 type="password"
                 name="confirmPassword"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 bg-gray-50 rounded-2xl focus:outline-none focus:bg-primary-50 transition-colors"
                 required
               />
             </div>
@@ -175,19 +175,19 @@ export default function ProfileForm({ user }: ProfileFormProps) {
               </div>
             )}
             
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 cursor-pointer"
+                className="px-6 py-3 bg-primary-500 text-white text-sm rounded-full hover:bg-primary-600 transition-colors shadow-lg flex-1"
               >
-                Modifier
+                🔄 Modifier
               </button>
               <button
                 type="button"
                 onClick={() => setShowPasswordForm(false)}
-                className="px-4 py-2 text-gray-600 text-sm hover:text-gray-800 cursor-pointer"
+                className="px-6 py-3 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition-colors shadow-md"
               >
-                Annuler
+                ❌ Annuler
               </button>
             </div>
           </form>
@@ -198,9 +198,9 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       <div className="border-t border-gray-100 pt-6">
         <button
           onClick={() => signOut({ callbackUrl: '/login' })}
-          className="text-sm text-red-600 hover:text-red-700 cursor-pointer"
+          className="px-6 py-3 bg-red-500 text-white text-sm rounded-full hover:bg-red-600 transition-colors shadow-lg w-full"
         >
-          Se déconnecter
+          🚪 Se déconnecter
         </button>
       </div>
     </div>

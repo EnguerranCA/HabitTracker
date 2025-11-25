@@ -16,7 +16,7 @@ async function getHabitsCalendarData(userId: string) {
     const allHabits = await prisma.habit.findMany({
       where: {
         userId,
-        // On peut ajouter une condition pour les habitudes actives si besoin
+        isActive: true, // Filtrer seulement les habitudes actives
       },
       select: {
         id: true,
@@ -27,9 +27,9 @@ async function getHabitsCalendarData(userId: string) {
       }
     });
 
-    // Récupérer les logs des 60 derniers jours
+    // Récupérer les logs des 14 derniers jours
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 60);
+    startDate.setDate(startDate.getDate() - 14);
     
     const logs = await prisma.habitLog.findMany({
       where: {
@@ -63,45 +63,52 @@ async function getHabitsCalendarData(userId: string) {
       }>;
     } } = {};
     
-    // Pour chaque jour des 30 derniers jours
-    for (let i = 0; i < 30; i++) {
+    // Grouper les logs par date une seule fois
+    const logsByDate = logs.reduce((acc, log) => {
+      const dateKey = log.date.toISOString().split('T')[0];
+      if (!acc[dateKey]) acc[dateKey] = [];
+      acc[dateKey].push(log);
+      return acc;
+    }, {} as { [key: string]: typeof logs });
+
+    // Pour chaque jour des 14 derniers jours (au lieu de 30)
+    for (let i = 0; i < 14; i++) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dateKey = date.toISOString().split('T')[0];
       
-      // Habitudes qui existaient ce jour-là
+      // Habitudes qui existaient ce jour-là (filtrer une seule fois)
       const habitsForDay = allHabits.filter(habit => {
         const habitCreatedDate = new Date(habit.createdAt);
         return habitCreatedDate <= date;
       });
 
-      // Logs pour ce jour
-      const logsForDay = logs.filter(log => {
-        const logDateKey = log.date.toISOString().split('T')[0];
-        return logDateKey === dateKey;
-      });
+      // Logs pour ce jour (accès direct au lieu de filter)
+      const logsForDay = logsByDate[dateKey] || [];
+
+      // Si pas d'habitudes pour ce jour, passer
+      if (habitsForDay.length === 0) continue;
 
       // Créer un map des habitudes avec leur status
-      const habitStatusMap = new Map();
-      
-      // D'abord, marquer toutes les habitudes comme non complétées
-      habitsForDay.forEach(habit => {
-        habitStatusMap.set(habit.id, {
+      const habitStatusMap = new Map(
+        habitsForDay.map(habit => [habit.id, {
           name: habit.name,
           emoji: habit.emoji,
           completed: false,
           type: habit.type as 'GOOD' | 'BAD'
-        });
-      });
+        }])
+      );
 
-      // Ensuite, mettre à jour avec les logs réels
+      // Mettre à jour avec les logs réels
       logsForDay.forEach(log => {
-        habitStatusMap.set(log.habitId, {
-          name: log.habit.name,
-          emoji: log.habit.emoji,
-          completed: log.completed,
-          type: log.habit.type as 'GOOD' | 'BAD'
-        });
+        if (habitStatusMap.has(log.habitId)) {
+          habitStatusMap.set(log.habitId, {
+            name: log.habit.name,
+            emoji: log.habit.emoji,
+            completed: log.completed,
+            type: log.habit.type as 'GOOD' | 'BAD'
+          });
+        }
       });
 
       const habits = Array.from(habitStatusMap.values());
@@ -109,14 +116,12 @@ async function getHabitsCalendarData(userId: string) {
       const total = habits.length;
       const missed = total - completed;
 
-      if (total > 0) { // Seulement ajouter si il y a des habitudes
-        calendarData[dateKey] = {
-          completed,
-          missed,
-          total,
-          habits
-        };
-      }
+      calendarData[dateKey] = {
+        completed,
+        missed,
+        total,
+        habits
+      };
     }
 
     return calendarData;
@@ -139,9 +144,9 @@ async function getHabitsTrackingData(userId: string) {
       }
     });
 
-    // Récupérer les logs des 14 derniers jours
+    // Récupérer les logs des 7 derniers jours
     const startDate = new Date();
-    startDate.setDate(startDate.getDate() - 14);
+    startDate.setDate(startDate.getDate() - 7);
     
     const logs = await prisma.habitLog.findMany({
       where: {
@@ -155,10 +160,18 @@ async function getHabitsTrackingData(userId: string) {
       }
     });
 
+    // Grouper les logs par date une seule fois
+    const logsByDate = logs.reduce((acc, log) => {
+      const dateKey = log.date.toISOString().split('T')[0];
+      if (!acc[dateKey]) acc[dateKey] = [];
+      acc[dateKey].push(log);
+      return acc;
+    }, {} as { [key: string]: typeof logs });
+
     // Créer les données pour le graphique
     const trackingData = [];
     
-    for (let i = 13; i >= 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
@@ -169,11 +182,8 @@ async function getHabitsTrackingData(userId: string) {
         return habitCreatedDate <= date;
       });
 
-      // Logs pour ce jour
-      const logsForDay = logs.filter(log => {
-        const logDateKey = log.date.toISOString().split('T')[0];
-        return logDateKey === dateStr;
-      });
+      // Logs pour ce jour (accès direct)
+      const logsForDay = logsByDate[dateStr] || [];
 
       const totalHabits = habitsForDay.length;
       const completedHabits = logsForDay.filter(log => log.completed).length;
