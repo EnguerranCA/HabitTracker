@@ -110,6 +110,9 @@ export async function fetchUserHabits(userId?: string) {
           },
           take: 1,
           select: {
+            id: true,
+            habitId: true,
+            date: true,
             completed: true,
           },
         },
