@@ -87,6 +87,7 @@ model UserProgress {
   // État du hérisson
   hedgehogSize  Int    @default(1) // Taille du hérisson (1-10)
   hedgehogMood  String @default("happy") // État émotionnel
+  glandCount    Int    @default(0) // Nombre de glands disponibles
   lastFed       DateTime?
   
   // Statistiques

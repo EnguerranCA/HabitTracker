@@ -4,7 +4,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import postgres from "postgres";
-import { signIn } from "@/auth";
+import { signIn, auth } from "@/auth";
 import { AuthError } from "next-auth";
 import bcrypt from "bcryptjs";
 import { prisma } from "./prisma";
@@ -313,6 +313,16 @@ export async function toggleHabitCompletion(habitId: string, completed: boolean)
       });
     }
 
+    // Ajouter de l'XP si l'habitude vient d'être accomplie
+    if (completed && (!existingLog || !existingLog.completed)) {
+      try {
+        await addXp(habit.userId, BASE_HABIT_XP, 'habit');
+      } catch (error) {
+        console.error('Erreur lors de l\'ajout d\'XP:', error);
+        // On continue même si l'XP échoue
+      }
+    }
+
     // Revalider les pages pour mettre à jour l'affichage
     revalidatePath('/dashboard');
     revalidatePath('/dashboard/calendar');
@@ -561,5 +571,141 @@ export async function changePassword(prevState: any, formData: FormData) {
     }
     console.error('Error changing password:', error);
     return { message: 'Erreur lors du changement de mot de passe.' };
+  }
+}
+
+// ========== SYSTÈME XP ET GAMIFICATION ==========
+
+import { 
+  calculateLevel, 
+  BASE_HABIT_XP, 
+  BASE_FEED_XP, 
+  FEED_COST,
+  calculateXpWithStreak,
+  canFeedHedgehog 
+} from './xp-system';
+
+/**
+ * Récupère ou crée les données de progression de l'utilisateur
+ */
+export async function getUserProgress(userId: string) {
+  try {
+    let progress = await prisma.userProgress.findUnique({
+      where: { userId }
+    });
+
+    // Créer les données de progression si elles n'existent pas
+    if (!progress) {
+      progress = await prisma.userProgress.create({
+        data: {
+          userId,
+          level: 1,
+          xp: 0,
+          totalXp: 0,
+          hedgehogSize: 1,
+          hedgehogMood: 'happy',
+          glandCount: 0,
+          totalHabitsCompleted: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+        }
+      });
+    }
+
+    return progress;
+  } catch (error) {
+    console.error('Erreur lors de la récupération de la progression:', error);
+    throw new Error('Impossible de récupérer les données de progression');
+  }
+}
+
+/**
+ * Ajoute de l'XP et met à jour le niveau de l'utilisateur
+ */
+export async function addXp(userId: string, xpGain: number, source: 'habit' | 'feed' = 'habit') {
+  try {
+    const progress = await getUserProgress(userId);
+    const newTotalXp = progress.totalXp + xpGain;
+    const newLevel = calculateLevel(newTotalXp);
+    const leveledUp = newLevel > progress.level;
+
+    // Mettre à jour la progression
+    const updatedProgress = await prisma.userProgress.update({
+      where: { userId },
+      data: {
+        xp: progress.xp + xpGain,
+        totalXp: newTotalXp,
+        level: newLevel,
+        totalHabitsCompleted: source === 'habit' ? progress.totalHabitsCompleted + 1 : progress.totalHabitsCompleted,
+        lastFed: source === 'feed' ? new Date() : progress.lastFed,
+      }
+    });
+
+    return {
+      success: true,
+      xpGained: xpGain,
+      newLevel,
+      leveledUp,
+      progress: updatedProgress
+    };
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout d\'XP:', error);
+    return { 
+      success: false, 
+      error: 'Impossible d\'ajouter l\'XP' 
+    };
+  }
+}
+
+/**
+ * Action pour nourrir le hérisson (consomme des glands, donne de l'XP)
+ */
+export async function feedHedgehog(userId: string) {
+  try {
+    // Récupérer les habitudes complétées aujourd'hui (= nombre de glands)
+    const session = await auth();
+    if (!session?.user) {
+      return { success: false, error: 'Non connecté' };
+    }
+
+    const today = new Date();
+    const todayUTC = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+    
+    // Compter les habitudes accomplies aujourd'hui
+    const completedHabitsCount = await prisma.habitLog.count({
+      where: {
+        userId,
+        date: todayUTC,
+        completed: true
+      }
+    });
+
+    // Vérifier si on peut nourrir
+    if (!canFeedHedgehog(completedHabitsCount)) {
+      return { 
+        success: false, 
+        error: `Il faut au moins ${FEED_COST} gland pour nourrir le hérisson. Vous en avez ${completedHabitsCount}.`
+      };
+    }
+
+    // Ajouter l'XP pour nourrir
+    const result = await addXp(userId, BASE_FEED_XP, 'feed');
+    
+    if (!result.success) {
+      return result;
+    }
+
+    return {
+      success: true,
+      xpGained: BASE_FEED_XP,
+      glandsUsed: FEED_COST,
+      glandsRemaining: completedHabitsCount - FEED_COST,
+      leveledUp: result.leveledUp,
+      newLevel: result.newLevel,
+      message: `+${BASE_FEED_XP} XP ! ${result.leveledUp ? `🎉 Niveau ${result.newLevel} atteint !` : ''}`
+    };
+  } catch (error) {
+    console.error('Erreur lors du nourrissage:', error);
+    return { success: false, error: 'Erreur lors du nourrissage du hérisson' };
   }
 }

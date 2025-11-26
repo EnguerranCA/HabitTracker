@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import Image from 'next/image';
+import { getHedgehogStage } from '@/app/lib/xp-system';
+import { feedHedgehog } from '@/app/lib/actions';
 
 interface Particle {
   id: number;
@@ -16,13 +18,45 @@ interface Particle {
 
 interface HedgehogProps {
   score: number;
+  level?: number;
+  userId?: string;
+  glandes?: number;
 }
 
-export default function Hedgehog({ score }: HedgehogProps) {
+export default function Hedgehog({ score, level = 1, userId, glandes = 0 }: HedgehogProps) {
   const [particles, setParticles] = useState<Particle[]>([]);
+  const [isPending, startTransition] = useTransition();
+  const [feedMessage, setFeedMessage] = useState<string>('');
+  
+  // Calculer le stade du hérisson
+  const { stage, stageNumber } = getHedgehogStage(level);
 
   const handleFeed = () => {
-    // TODO: Implémenter la logique de nourrissage
+    if (!userId || isPending) return;
+    
+    startTransition(async () => {
+      try {
+        const result = await feedHedgehog(userId);
+        
+        if (result.success) {
+          const message = 'leveledUp' in result && result.leveledUp 
+            ? `+${result.xpGained} XP ! 🎉 Niveau ${result.newLevel} atteint !`
+            : `+${result.xpGained} XP ! Hérisson nourri !`;
+          setFeedMessage(message);
+          // Déclencher animation de nourrissage
+          triggerNutAnimation(200, 200);
+          // Effacer le message après 3 secondes
+          setTimeout(() => setFeedMessage(''), 3000);
+        } else {
+          setFeedMessage(result.error || 'Erreur lors du nourrissage');
+          setTimeout(() => setFeedMessage(''), 3000);
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        setFeedMessage('Erreur lors du nourrissage');
+        setTimeout(() => setFeedMessage(''), 3000);
+      }
+    });
     console.log('Nourrir le hérisson !');
   };
 
@@ -50,6 +84,27 @@ export default function Hedgehog({ score }: HedgehogProps) {
         deltaX: targetX - fromX,
         deltaY: targetY - fromY,
       });
+  };
+  
+  const triggerNutAnimation = () => {
+    // Animation simple lors du nourrissage
+    const newParticle: Particle = {
+      id: Date.now(),
+      x: 200, // Centre approximatif du hérisson
+      y: 200,
+      delay: 0,
+      targetX: 0,
+      targetY: -50,
+      deltaX: 0,
+      deltaY: -50
+    };
+    
+    setParticles(prev => [...prev, newParticle]);
+    
+    // Nettoyer après l'animation
+    setTimeout(() => {
+      setParticles(prev => prev.filter(p => p.id !== newParticle.id));
+    }, 2000);
     }
     
     setParticles(prev => [...prev, ...newParticles]);
@@ -123,6 +178,14 @@ export default function Hedgehog({ score }: HedgehogProps) {
           <div className="absolute bottom-6 left-1/3 text-xs">🌺</div>
         </div>
         
+        {/* Informations niveau au-dessus du hérisson */}
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-center z-10">
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-2 shadow-lg border-2 border-primary-300">
+            <div className="text-sm font-bold text-primary-700">Niveau {level}</div>
+            <div className="text-xs text-primary-600">{stage}</div>
+          </div>
+        </div>
+        
         {/* Hérisson au centre */}
         <Image
         width={150}
@@ -134,13 +197,25 @@ export default function Hedgehog({ score }: HedgehogProps) {
 
       </div>
       
+      {/* Message de feedback */}
+      {feedMessage && (
+        <div className="mt-4 px-4 py-2 rounded-full bg-primary-100 text-primary-700 text-sm font-medium text-center">
+          {feedMessage}
+        </div>
+      )}
+      
       {/* Bouton Nourrir */}
       <button
         onClick={handleFeed}
-        className="mt-6 bg-primary-500 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-primary-600 transition-colors flex items-center gap-2"
+        disabled={isPending || glandes < 1}
+        className={`mt-6 px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition-colors flex items-center gap-2 ${
+          isPending || glandes < 1 
+            ? 'bg-gray-400 text-gray-200 cursor-not-allowed' 
+            : 'bg-primary-500 text-white hover:bg-primary-600'
+        }`}
       >
-        <Image src="/gland.webp" alt="Gland" width={25} height={25} className="inline-block" />
-        Nourrir
+        <Image src="/gland.webp" alt="Gland" width={20} height={20} className="inline-block" />
+        {isPending ? 'Nourrissage...' : `Nourrir (${glandes} glands)`}
       </button>
     </div>
   );
